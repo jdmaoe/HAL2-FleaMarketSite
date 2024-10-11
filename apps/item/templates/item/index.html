@@ -1,0 +1,196 @@
+{% extends "item/base.html" %} {% block css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/slick.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/slick-theme.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/style_item.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/style.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/miniboot.css') }}"
+/>
+
+{% endblock %} {% block js %} {% endblock %} {% block title %} トップページ {%
+endblock %} {% block content %}
+
+<!-- SerchItemformの記述 -->
+<div class="topwrap">
+  <div class="sortwrap">
+    <div class="sortfix">
+      <form action="{{ url_for('items.index') }}" method="post">
+        {{ form_c.csrf_token }}
+        <div class="form-group-serch">
+          <label class="small">
+            第一カテゴリ
+            <span>
+              {{ form_c.firstcategory(class="form-control-serch") }}
+            </span>
+          </label>
+        </div>
+        <div class="form-group-serch">
+          <label class="small">
+            第二カテゴリ
+            <span>
+              {{ form_c.secondcategory(class="form-control-serch") }}
+            </span>
+          </label>
+        </div>
+        <div class="form-group-serch">
+          <label class="small">
+            第三カテゴリ
+            <span>
+              {{ form_c.thirdcategory(class="form-control-serch") }}
+            </span>
+          </label>
+        </div>
+        <div class="form-group-serch">
+          <label class="small">
+            価格（下限）
+            <span> {{ form_c.min_price(class="form-control-serch") }} </span>
+          </label>
+        </div>
+        <div class="form-group-serch">
+          <label class="small">
+            価格（上限）
+            <span> {{ form_c.max_price(class="form-control-serch") }} </span>
+          </label>
+        </div>
+        <div class="form-group-serch">
+          <label class="small">
+            キーワード
+            <span>
+              {{
+              form_c.keyword(class="form-control-serch",placeholder="キーワードを入力")
+              }}
+            </span>
+          </label>
+        </div>
+
+        <div>
+          <label class="btnlabel">
+            {{ form_c.submit(class="btn_serch") }}
+          </label>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="product">
+    <div class="image-container">
+      <div>
+        <a href="{{ url_for('items.recommend1') }}"
+          ><img
+            src="{{ url_for('static',filename='image/Reco.png') }}"
+            alt="Image 1"
+        /></a>
+      </div>
+      <div>
+        <a href="{{ url_for('items.recommend2') }}"
+          ><img
+            src="{{ url_for('static',filename='image/Reco2.png') }}"
+            alt="Image 2"
+        /></a>
+      </div>
+      <div>
+        <a href="{{ url_for('items.recommend3') }}"
+          ><img
+            src="{{ url_for('static',filename='image/Reco3.png') }}"
+            alt="Image 3"
+        /></a>
+      </div>
+    </div>
+    <!--出品画面へのリンクを追加する-->
+
+    {% for sell_item in sell_items %}
+    <a href="{{ url_for('items.item_detail', item_id=sell_item.Item.id) }}">
+      <!-- <div class="card col-md7 item-image-content"> -->
+      <!-- <div class="item-image-username"><a>{{ sell_item.name }}</a></div> -->
+      <!--商品詳細ページへのリンク-->
+      <div class="contents">
+        <figure class="image">
+          <img
+            src="{{ url_for('items.image_file',
+              filename=sell_item.Image.image_path) }}"
+            alt="出品画像"
+          />
+        </figure>
+        <div class="cardbody">
+          <h3>{{ sell_item.Item.name }}</h3>
+          <!-- 価格を三桁区切りにする -->
+          <p class="price">￥{{ '{:,}'.format(sell_item.Item.price) }} JPY</p>
+          <div class="description">
+            <h4>商品説明</h4>
+            <!-- <p>{{ sell_item.Item.description }}</p> -->
+            <!-- 商品説明が30文字以上なら -->
+            <p>
+              {% if sell_item.Item.description|length > 60 %} {{
+              sell_item.Item.description[:60] }}... {% else %} {{
+              sell_item.Item.description }} {% endif %}
+            </p>
+            <h4>カテゴリ</h4>
+            <p>
+              {{ sell_item.Item.FirstCategory.name }} >> {{
+              sell_item.Item.SecondCategory.name }} >> {{
+              sell_item.Item.ThirdCategory.name }}
+            </p>
+            <p>
+              <!-- 出品時刻 -->
+              {% set time_difference = current_time - sell_item.Item.created_at
+              %} {% if time_difference.days > 0 %} {{ time_difference.days
+              }}日前 {% elif time_difference.seconds < 3600 %} {{
+              time_difference.seconds // 60 }}分前 {% elif
+              time_difference.seconds < 86400 %} {{ time_difference.seconds //
+              3600 }}時間前 {% else %} {{
+              sell_item.Item.created_at.strftime('%Y-%m-%d') }} {% endif %}
+            </p>
+          </div>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- ページネーション -->
+<ul class="pagination">
+  {% if sell_items.has_prev %}
+  <li>
+    <a href="?page={{ sell_items.prev_num }}">Back</a>
+  </li>
+  {% endif %} {% for num in sell_items.iter_pages() %} {% if num %} {% if
+  sell_items.page == num %}
+  <li>
+    <div class="now">{{ num }}</div>
+  </li>
+  {% else %}
+  <li>
+    <a href="?page={{ num }}">{{ num }}</a>
+  </li>
+  {% endif %} {% else %}
+  <li>
+    <span>...</span>
+  </li>
+  {% endif %} {% endfor %} {% if sell_items.has_next %}
+  <li>
+    <a href="?page={{ sell_items.next_num }}">Next</a>
+  </li>
+  {% endif %}
+</ul>
+
+<script src="{{ url_for('static', filename='js/get_category.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/slick.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/slider.js') }}"></script>
+<script src="{{ url_for('static', filename='js/top.js') }}"></script>
+
+{% endblock %}

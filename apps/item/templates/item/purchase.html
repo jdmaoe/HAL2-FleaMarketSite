@@ -1,0 +1,184 @@
+{% extends "item/base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/miniboot.css') }}" />
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" /> -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}" />
+<!-- 購入ページにcssつくるなら別途purchase.cssを作成すること -->
+{% endblock %}
+
+
+
+{% block title %}
+購入ページ
+{% endblock %}
+
+
+
+
+{% block content %}
+
+
+
+
+
+<div class="container mt-5 text-center">
+  <h2>商品情報</h2>
+</div>
+
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-md-1" style="width: 10%;"></div>
+    <div class="col-md-4" style="width: 30%;">
+      <img src="{{ url_for('items.image_file', filename=item.Image.image_path) }}" alt="出品画像" class="img-fluid">
+    </div>
+    <div class="col-md-6 p-size" style="width: 50%;">
+      <!-- <p>商品名:{{ item.Item.name }}</p> -->
+      <!-- 商品名が20文字を越える場合、20文字＋… -->
+      {% if item.Item.name|length > 20 %}
+      <p><span class="bold">商品名</span>:{{ item.Item.name[:20] }}…</p>
+      {% else %}
+      <p><span class="bold">商品名</span>:{{ item.Item.name }}</p>
+      {% endif %}
+      <!-- <p>価格:{{ item.Item.price }}</p> -->
+      <p><span class="bold">価格</span>:￥{{ '{:,}'.format(item.Item.price) }}</p>
+      <!-- <p>送料:{{ item.Item.postage }}</p> -->
+      <p><span class="bold">送料</span>:￥{{ '{:,}'.format(item.Item.postage) }}</p>
+      <!-- <p>商品説明:{{ item.Item.description }}</p> -->
+      <!-- 商品説明が150文字を越える場合、150文字+… -->
+      {% if item.Item.description|length > 150 %}
+      <p><span class="bold">商品説明</span>:{{ item.Item.description[:150] }}…</p>
+      {% else %}
+      <p><span class="bold">商品説明</span>:{{ item.Item.description }}</p>
+      {% endif %}
+      <p><span class="bold">出品者</span>:{{ sell_user.username }}</p>
+    </div>
+    <div class="col-md-1" style="width: 10%;"></div>
+  </div>
+</div>
+
+<div class="container mt-5 text-center">
+  <h2>購入情報</h2>
+</div>
+
+<div class="container mt-5 mb-5">
+  <form id="orderForm" name="orderForm" action="{{ url_for('items.item_purchase', item_id=item.Item.id) }}" class="container mt-4" method="post" novalidate>
+
+    <!-- CSRFトークン -->
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <!-- 配送先住所 -->
+    <div class="form-group">
+      <label for="shippingAddress">配送先住所:</label>
+      <input type="text" class="form-control" id="shippingAddress" name="shippingAddress" required value="{% if current_user.address == None or current_user.address == 'None' %}{% else %}{{ current_user.address }}{% endif %}{% if current_user.building_name_number == None or current_user.building_name_number == 'None' %}{% else %}{{ current_user.building_name_number }}{% endif %}">
+      <small id="shippingAddressError" class="text-danger error-message"></small>
+    </div>
+
+    <!-- 決済方法 -->
+    <div class="form-group">
+      <label for="paymentMethod">決済方法:</label>
+      <select class="form-control" id="paymentMethod" name="paymentMethod" onchange="togglePaymentFields()">
+        <option value="creditCard" selected>クレジットカード決済</option>
+        <option value="bankTransfer">口座振替</option>
+      </select>
+    </div>
+
+    <!-- クレジットカード決済の入力フィールド -->
+    <div id="creditCardFields" style="display: none;">
+
+      <div class="form-group">
+        <label for="creditCardNumber">クレジットカード番号:</label>
+        <input type="text" class="form-control" id="creditCardNumber" name="creditCardNumber" value="{% if pay_user.u_cardnumber == None or pay_user.address == 'None' %}{% else %}{{ pay_user.u_cardnumber }}{% endif %}">
+        <small id="creditCardNumberError" class="text-danger error-message"></small>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="expiryMonth">有効期限（月）:</label>
+          <input type="number" class="form-control" id="expiryMonth" name="expiryMonth" min="1" max="12" value="{% if pay_user.u_goodthru_month == None or pay_user.u_goodthru_month == 'None' %}{% else %}{{ pay_user.u_goodthru_month }}{% endif %}">
+          <small id="expiryMonthError" class="text-danger error-message"></small>
+        </div>
+
+        <div class="form-group col-md-4">
+          <label for="expiryYear">有効期限（年）:</label>
+          <input type="number" class="form-control" id="expiryYear" name="expiryYear" min="24" max="34" value="{% if pay_user.u_goodthru_year == None or pay_user.u_goodthru_year == 'None' %}{% else %}{{ pay_user.u_goodthru_year }}{% endif %}">
+          <small id="expiryYearError" class="text-danger error-message"></small>
+        </div>
+
+        <div class="form-group col-md-4">
+          <label for="pin">PIN:</label>
+          <input type="text" class="form-control" id="pin" name="pin">
+          <small id="pinError" class="text-danger error-message"></small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="cardHolderName">カード名義人:</label>
+        <input type="text" class="form-control" id="cardHolderName" name="cardHolderName" value="{% if pay_user.u_cardnominee == None or pay_user.u_cardnominee == 'None' %}{% else %}{{ pay_user.u_cardnominee }}{% endif %}">
+        <small id="cardHolderNameError" class="text-danger error-message"></small>
+      </div>
+    </div>
+
+    <!-- 口座振替の入力フィールド -->
+    <div id="bankTransferFields" style="display: none;">
+
+      <div class="form-group">
+        <label for="bankCode">金融機関コード:</label>
+        <input type="text" class="form-control" id="bankCode" name="bankCode" value="{% if pay_user.u_bankcode == None or pay_user.u_bankcode == 'None' %}{% else %}{{ pay_user.u_bankcode }}{% endif %}">
+        <small id="bankCodeError" class="text-danger error-message"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="branchCode">支店コード:</label>
+        <input type="text" class="form-control" id="branchCode" name="branchCode" value="{% if pay_user.u_branchcode == None or pay_user.u_branchcode == 'None' %}{% else %}{{ pay_user.u_branchcode }}{% endif %}">
+        <small id="branchCodeError" class="text-danger error-message"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="accountType">預金種目:</label>
+        <select class="form-control" id="accountType" name="accountType">
+          {% if pay_user.u_deposititem == None or pay_user.u_deposititem == 'None' %}
+          <option value="1">普通</option>
+          <option value="2">当座</option>
+          {% elif pay_user.u_deposititem == "1" %}
+          <option value="1" selected>普通</option>
+          <option value="2">当座</option>
+          {% elif pay_user.u_deposititem == "2" %}
+          <option value="1">普通</option>
+          <option value="2" selected>当座</option>
+          {% endif %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="accountNumber">口座番号:</label>
+        <input type="text" class="form-control" id="accountNumber" name="accountNumber" value="{% if pay_user.u_accountnumber == None or pay_user.u_accountnumber == 'None' %}{% else %}{{ pay_user.u_accountnumber }}{% endif %}">
+        <small id="accountNumberError" class="text-danger error-message"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="accountHolderName">口座名義人:</label>
+        <input type="text" class="form-control" id="accountHolderName" name="accountHolderName" value="{% if pay_user.u_accountnominee == None or pay_user.u_accountnominee == 'None' %}{% else %}{{ pay_user.u_accountnominee }}{% endif %}">
+        <small id="accountHolderNameError" class="text-danger error-message"></small>
+      </div>
+    </div>
+    <div class="container text-center">
+      <button type="button" class="back_btn mb-5" onclick="history.back()">戻る</button>
+      <button type="submit" class="send_btn mb-5">送信</button>
+    </div>
+  </form>
+</div>
+
+
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/purchase.js') }}"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+{% endblock %}
+
+
+
+{% endblock %}

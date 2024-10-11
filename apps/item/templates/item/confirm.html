@@ -1,0 +1,131 @@
+{% extends "item/base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" /> -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/miniboot.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}" />
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block title %}
+購入確認ページ
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container mt-5 text-center">
+  <h2>購入内容の確認</h2>
+</div>
+
+<div class="container mt-4 mid-pad">
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th class="th4">項目</th>
+          <th class="th8">内容</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td4">出品者</td>
+          <td class="td8">{{ sell_user.username }}</td>
+        </tr>
+        <tr>
+          <td class="td4">商品名</td>
+          <td class="td8">{{ item.Item.name }}</td>
+        </tr>
+        <tr>
+          <td class="td4">商品説明</td>
+          <td class="td8">{{ item.Item.description }}</td>
+        </tr>
+        <tr>
+          <td class="td4">価格</td>
+          <!-- <td>{{ item.Item.price }}円</td> -->
+          <td class="td8">{{ '{:,}'.format(item.Item.price) }}円</td>
+        </tr>
+        <tr>
+          <td class="td4">配送料</td>
+          <!-- <td>{{ item.Item.postage }}円</td> -->
+          <td class="td8">{{ '{:,}'.format(item.Item.postage) }}円</td>
+        </tr>
+        <tr>
+          <td class="td4">配送先住所</td>
+          <td class="td8">{{ shipping_address }}</td>
+        </tr>
+        {% if payment_method == "1" %}
+        <tr>
+          <td class="td4">支払い方法</td>
+          <td class="td8">クレジットカード</td>
+        </tr>
+        <tr>
+          <td class="td4">カード番号の下4桁</td>
+          <td class="td8">{{ under4_cardnumber }}</td>
+        </tr>
+        <tr>
+          <td class="td4">有効期限</td>
+          <td class="td8">{{ goodthru }}</td>
+        </tr>
+        <tr>
+          <td class="td4">カード名義人</td>
+          <td class="td8">{{ cardnominee }}</td>
+        </tr>
+        {% endif %}
+        {% if payment_method == "2" %}
+        <tr>
+          <td class="td4">支払い方法</td>
+          <td class="td8">銀行振込</td>
+        </tr>
+        <tr>
+          <td class="td4">銀行機関コード</td>
+          <td class="td8">{{ bankcode }}</td>
+        </tr>
+        <tr>
+          <td class="td4">銀行支店コード</td>
+          <td class="td8">{{ branchcode }}</td>
+        </tr>
+        <tr>
+          <td class="td4">預金種目</td>
+          <td class="td8">{{ deposititem }}</td>
+        </tr>
+        <tr>
+          <td class="td4">口座番号の下4桁</td>
+          <td class="td8">{{ under4_accountnumber }}</td>
+        </tr>
+        <tr>
+          <td class="td4">口座名義人</td>
+          <td class="td8">{{ accountnominee }}</td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <form action="{{ url_for('items.item_purchase_fin', item_id=item.Item.id) }}" method="post">
+    <input type="hidden" value="{{ csrf_token() }}" name="csrf_token">
+    <input type="hidden" value="{{ shipping_address }}" name="shipping_address">
+    <input type="hidden" value="{{ payment_method }}" name="payment_method">
+    <input type="hidden" value="{{ card_number }}" name="card_number">
+    <input type="hidden" value="{{ good_thru }}" name="good_thru">
+    <input type="hidden" value="{{ pin }}" name="pin">
+    <input type="hidden" value="{{ cardnominee }}" name="cardnominee">
+    <input type="hidden" value="{{ bankcode }}" name="bankcode">
+    <input type="hidden" value="{{ branchcode }}" name="branchcode">
+    <input type="hidden" value="{{ deposititem }}" name="deposititem">
+    <input type="hidden" value="{{ accountnumber }}" name="accountnumber">
+    <input type="hidden" value="{{ accountnominee }}" name="accountnominee">
+    <div class="container mt-3 mb-5 text-center">
+      <button class="back_btn mb-5" type="button" onclick="history.back()">修正する</button>
+      <button type="submit" class="send_btn mb-5">購入する</button>
+    </div>
+  </form>
+</div>
+
+
+
+
+  {% endblock %}

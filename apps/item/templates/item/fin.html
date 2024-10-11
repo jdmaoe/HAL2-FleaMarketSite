@@ -1,0 +1,35 @@
+{% extends "item/base.html" %} {% block css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/style_item.css') }}"
+/>
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" /> -->
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/miniboot.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/form.css') }}"
+/>
+{% endblock %} {% block js %} {% endblock %} {% block title %} 購入完了ページ {%
+endblock %} {% block content %}
+<div class="container mt-5 mb-5 text-center thanks">
+  <h1>購入ありがとうございました！</h1>
+  <p>マイページから出品者様との取引連絡を進めてください。</p>
+</div>
+
+<figure class="img_box">
+  <img
+    src="{{ url_for('items.image_file',
+  filename=fin_item.Image.image_path) }}"
+    alt="購入画像"
+    class="anim-box poyoyon2 is-animated"
+  />
+</figure>
+
+<div class="container mt-5 mb-5 text-center toplink">
+  <a href="{{ url_for('items.index') }}">トップページへ</a>
+</div>
+
+{% endblock %}

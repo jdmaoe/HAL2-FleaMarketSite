@@ -1,0 +1,365 @@
+{% extends "item/base.html" %} {% block css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/style_item.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/style.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/style_listing.css') }}"
+/>
+{% endblock %} {% block js %} {% endblock %} {% block title %} 出品ページ {%
+endblock %} {% block content %}
+<div class="contact">
+  <h2 class="contact-ttl">出品</h2>
+  <form
+    action="{{ url_for('items.item_sell') }}"
+    method="post"
+    enctype="multipart/form-data"
+    novalidate="novalidate"
+  >
+    {{ form.hidden_tag() }} {{ form.csrf_token }}
+    <div class="cp_iptxt">
+      {{ form.name(class="cp_sl06 sellname") }}
+      <span class="cp_sl06_highlight"></span>
+      <span class="cp_sl06_selectbar"></span>
+      <label class="labelname">商品名</label>
+      <!-- <span class="focus_line"></span> -->
+
+      {% for error in form.name.errors %}
+      <span style="color: red" class="error-message">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <!--  -->
+    <div class="cp_iptxt">
+      {{ form.description(class="cp_sl06 selldes",style="width:87%;") }}
+      <span class="cp_sl06_highlight"></span>
+      <span class="cp_sl06_selectbar"></span>
+      <label class="labeldes">商品説明</label>
+      <!-- <span class="focus_line"></span> -->
+
+      {% for error in form.description.errors %}
+      <span style="color: red" class="error-message">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <!--  -->
+
+    <div class="cp_iptxt">
+      {{ form.price(class="cp_sl06 sellprice") }}
+      <span class="cp_sl06_highlight"></span>
+      <span class="cp_sl06_selectbar"></span>
+      <label class="labelprice">商品価格</label>
+      <!-- <span class="focus_line"></span> -->
+
+      {% for error in form.price.errors %}
+      <span style="color: red" class="error-message">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <!--  -->
+    <div class="cp_ipselect">
+      {{ form.firstcategory(class="cp_sl06") }}
+      <span class="cp_sl06_highlight"></span>
+      <span class="cp_sl06_selectbar"></span>
+      <label class="cp_sl06_selectlabel">第一カテゴリ</label>
+
+      {% for error in form.firstcategory.errors %}
+      <span style="color: red" class="error-message">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <!--  -->
+
+    <div class="cp_ipselect">
+      {{ form.secondcategory(class="cp_sl06") }}
+      <span class="cp_sl06_highlight"></span>
+      <span class="cp_sl06_selectbar"></span>
+      <label class="cp_sl06_selectlabel">第二カテゴリ</label>
+
+      {% for error in form.secondcategory.errors %}
+      <span style="color: red" class="error-message">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <!--  -->
+    <div class="cp_ipselect">
+      {{ form.thirdcategory(class="cp_sl06") }}
+      <span class="cp_sl06_highlight"></span>
+      <span class="cp_sl06_selectbar"></span>
+      <label class="cp_sl06_selectlabel">第三カテゴリ</label>
+
+      {% for error in form.thirdcategory.errors %}
+      <span style="color: red" class="error-message">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <!--  -->
+    <div class="cp_ipselect">
+      {{ form.condition(class="cp_sl06 cond2") }}
+      <span class="cp_sl06_highlight"></span>
+      <span class="cp_sl06_selectbar"></span>
+      <label class="cond" id="cond">商品の状態</label>
+
+      {% for error in form.condition.errors %}
+      <span style="color: red" class="error-message">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <!--  -->
+
+    <div class="cp_iptxt">
+      {{ form.postage(class="cp_sl06 sellpos") }}
+      <span class="cp_sl06_highlight"></span>
+      <span class="cp_sl06_selectbar"></span>
+      <label class="labelpos" id="labelpos">送料</label>
+      <!-- <span class="focus_line"></span> -->
+
+      {% for error in form.postage.errors %}
+      <span style="color: red" class="error-message">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <!--  -->
+    <!-- <tr id="images">
+        <div class="">画像</div>
+        <div class="">
+          {% for image_form in form.images %}
+          <label>
+            <span>{{ image_form.image(class="form-control") }}</span>
+          </label>
+          <button type="button" onclick="addImageField()">画像を追加</button>
+          {% endfor %} {% for error in form.images.errors %}
+          <span style="color: red">{{ error }}</span>
+          {% endfor %}
+        </div>
+      </tr> -->
+
+    <div id="images">
+      <div class="addform">
+        {% for i in range(form.images|length) %}
+        <label style="display: block" class="file_button">
+          +画像を選択
+          <span>{{ form.images[i].image(class="file_input") }}</span>
+        </label>
+        <p class="file-names">選択されていません</p>
+        {% if form.is_submitted() %} {% if form.images[i].image.data is none %}
+        <span style="color: red"
+          >{{ i + 1 }}枚目の画像が入力されていません。</span
+        >
+        {% elif form.images[i].image.data.filename is not none and not
+        form.images[i].image.data.filename.lower().endswith(('.jpeg', '.jpg',
+        '.png')) %}
+        <span style="color: red"
+          >{{ i + 1 }}枚目の形式はサポートされていません。</span
+        >
+        {% endif %} {% endif %} {% endfor %}
+
+        <button
+          type="button"
+          onclick="addImageField()"
+          class="addbtn btn btn-mod btn-border btn-size btn-circle"
+        >
+          +
+        </button>
+      </div>
+    </div>
+    <!--  -->
+
+    <div class="moviewrap" id="moviewrap">
+      <label class="file_button orange">
+        +動画を選択
+        <span> {{ form.movie(class="file_input") }} </span>
+      </label>
+      <p class="file-names" id="movienames">選択されていません</p>
+
+      {% for error in form.movie.errors %}
+      <span style="color: red">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <br />
+
+    <hr />
+    <div class="button-wrap">
+      <label>
+        {{ form.submit(class="btn btn-mod btn-border btn-circle btn-large") }}
+      </label>
+    </div>
+  </form>
+</div>
+<script>
+  $(document).ready(function () {
+    // ... 既存の JavaScript ...
+
+    // 画像ファイルが選択されたときにファイル名を表示
+    $('input[type="file"]').change(function () {
+      var fileName = $(this).val().split("\\").pop();
+      $(this).closest("label").next("p.file-names").text(fileName);
+    });
+  });
+  $(document).ready(function () {
+    var firstcategory_id = $("#firstcategory").val();
+    if (firstcategory_id) {
+      $.ajax({
+        url: "/get_firstcategorys/",
+        type: "GET",
+        success: function (response) {
+          $("#firstcategory").html(response);
+        },
+        error: function (error) {
+          console.log(error);
+        },
+      });
+    }
+
+    $("#firstcategory").change(function () {
+      var firstcategory_id = $(this).val();
+      if (firstcategory_id) {
+        $.ajax({
+          url: "/get_secondcategorys/" + firstcategory_id,
+          type: "GET",
+          success: function (response) {
+            $("#secondcategory").html(response);
+          },
+          error: function (error) {
+            console.log(error);
+          },
+        });
+      } else {
+        $("#secondcategory").empty();
+        $("#thirdcategory").empty();
+      }
+    });
+
+    $("#secondcategory").change(function () {
+      var secondcategory_id = $(this).val();
+      if (secondcategory_id) {
+        $.ajax({
+          url: "/get_thirdcategorys/" + secondcategory_id,
+          type: "GET",
+          success: function (response) {
+            $("#thirdcategory").html(response);
+          },
+          error: function (error) {
+            console.log(error);
+          },
+        });
+      } else {
+        $("#thirdcategory").empty();
+      }
+    });
+
+    $(".cond2").click(function () {
+      $(".cond").addClass("after");
+    });
+
+    $(".sellname").click(function () {
+      $(".labelname").addClass("after");
+    });
+
+    $(".selldes").click(function () {
+      $(".labeldes").addClass("after");
+    });
+
+    $(".sellprice").click(function () {
+      $(".labelprice").addClass("after");
+    });
+
+    $(".sellpos").click(function () {
+      $(".labelpos").addClass("after");
+    });
+  });
+
+  function addImageField() {
+    var image_count = $("#images").find("label").length;
+
+    if (image_count < 10) {
+      var newLabel = $(
+        '<div class="addlabel"><label style="display: block" class="file_button">+画像を選択<span><input class="file_input" id="images-' +
+          image_count +
+          '-image" name="images-' +
+          image_count +
+          '-image" type="file" value=""></span></label><p class="file-names">選択されていません</p><button type="button" onclick="deleteImageField(this)" class="delete btn btn-mod btn-border btn-circle">-</button></div>'
+      );
+
+      // 新しく追加された画像フォームに削除ボタンを追加
+      //newLabel.append(deleteButton);
+
+      $(".addform .addbtn").before(newLabel);
+
+      // 新しく追加された画像フォームにイベントリスナーを適用
+      newLabel.find('input[type="file"]').change(function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).closest("label").next("p.file-names").text(fileName);
+      });
+    }
+  }
+
+  function deleteImageField(button) {
+    // 削除対象の親要素を取得
+    var parentLabel = $(button).closest(".addlabel");
+    // 削除対象の.file-names要素を取得
+    var fileNamesElement = parentLabel.next(".file-names");
+    // 削除対象の親要素と.file-namesを削除
+    var fileName = fileNamesElement.text();
+    parentLabel.remove();
+    fileNamesElement.remove();
+  }
+</script>
+
+<script>
+  var first = document.getElementById("firstcategory");
+  var postage = document.getElementById("postage");
+  var labelpos = document.getElementById("labelpos");
+  var condition = document.getElementById("condition");
+  var cond = document.getElementById("cond");
+  var movie = document.getElementById("movie");
+  var movienames = document.getElementById("movienames");
+  var moviewrap = document.getElementById("moviewrap");
+
+  // ページが読み込まれたときに実行
+  window.onload = function () {
+    // movieを非表示にする
+    movie.style.display = "none";
+    movienames.style.display = "none";
+    moviewrap.style.display = "none";
+  };
+
+  //　firstcategoryの値が変わったら実行
+  first.addEventListener("change", function () {
+    // firstcategoryの値を取得
+    var firstcategory = first.value;
+    // もしfirstcategoryの値が6だったら
+    if (firstcategory == 6) {
+      // postageとlabelposとconditionとcondを非表示にする
+      postage.style.display = "none";
+      labelpos.style.display = "none";
+      condition.style.display = "none";
+      cond.style.display = "none";
+      // movieを表示する
+      movie.style.display = "block";
+      movienames.style.display = "block";
+      moviewrap.style.display = "block";
+      // movienamesの値をなくす
+      movienames.innerHTML = "";
+      // postageの値を0にする
+      postage.value = 0;
+    } else {
+      // それ以外の場合は表示する
+      postage.style.display = "block";
+      labelpos.style.display = "block";
+      condition.style.display = "block";
+      cond.style.display = "block";
+      movie.style.display = "none";
+      movienames.style.display = "none";
+      moviewrap.style.display = "none";
+      movie.value = "";
+    }
+  });
+</script>
+
+{% endblock %}

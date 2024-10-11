@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" /> -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/reset.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/g-navi.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('communication.static', filename='/css/thumb.css' ) }}"
+    />
+    {% block css %}{% endblock %}
+    <!-- 
+  <link rel="stylesheet" href="{{ url_for('mypage.static', filename='css/style_mypage.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style_listing.css') }}" />
+   -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {% block js %}{% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+
+  <body>
+    <header>
+      <a class="navbar-brand" href="{{ url_for('items.index') }}">
+        <img
+          src="{{ url_for('static',filename='image/logo2.png') }}"
+          alt="ロゴ"
+        />
+      </a>
+      <nav class="grandnav">
+        <ul class="menu">
+          <!-- <li> -->
+            <!-- <a class="navbar-brand" href="/admin" class="btn btn-primary">管理画面</a> -->
+          <!-- </li> -->
+          <li class="{% if hide_button %}hidden-button{% endif %}">
+            <button
+              class="{% if hide_button %}hidden-button{% endif %} go-back"
+              onclick="goBack()"
+            >
+              <img
+                class="{% if hide_button %}hidden-button{% endif %}"
+                src="{{ url_for('static',filename='image/go_back.png') }}"
+                alt="戻る"
+              />
+            </button>
+          </li>
+          {% if current_user.is_authenticated %} {% else %}
+          <li>
+            <a href="{{ url_for('auth.signup') }}">
+              <img
+                src="{{ url_for('static',filename='image/login.png') }}"
+                alt="ログイン/新規登録"
+              />
+            </a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <a href="#">
+              <img
+                src="{{ url_for('static',filename='image/communication.png') }}"
+                alt="コミュニケーション"
+              />
+            </a>
+            <div class="dropdown-menu">
+              <a href="{{ url_for('communication.blog') }}">
+                <img
+                  src="{{ url_for('static',filename='image/blog.png') }}"
+                  alt="ブログ"
+                />
+              </a>
+              <a href="{{ url_for('communication.Chat_List') }}">
+                <img
+                  src="{{ url_for('static',filename='image/chat.png') }}"
+                  alt="チャット"
+                />
+              </a>
+              <a href="{{ url_for('communication.board') }}">
+                <img
+                  src="{{ url_for('static',filename='image/board.png') }}"
+                  alt="掲示板"
+                />
+              </a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a href="#">
+              <img
+                src="{{ url_for('static',filename='image/special.png') }}"
+                alt="スペシャル"
+              />
+            </a>
+            <div class="dropdown-menu">
+              <a href="{{ url_for('special.game') }}">
+                <img
+                  src="{{ url_for('static',filename='image/game.png') }}"
+                  alt="ゲーム"
+                />
+              </a>
+              <a href="{{ url_for('special.video_conversion') }}">
+                <img
+                  src="{{ url_for('static',filename='image/movie.png') }}"
+                  alt="動画字幕"
+                />
+              </a>
+            </div>
+          </li>
+          <li>
+            <a href="{{ url_for('items.item_sell') }}">
+              <img
+                src="{{ url_for('static',filename='image/sell.png') }}"
+                alt="出品"
+              />
+            </a>
+          </li>
+
+          {% if current_user.is_authenticated %}
+          <li class="navface">
+            <a href="{{ url_for('mypage.profile', user_id=current_user.id) }}">
+              {% if current_user.face_image_path == None %}
+              <img
+                src="{{ url_for('static',filename='image/thumb.png') }}"
+                class="thumb"
+                alt="汎用顔画像"
+              />
+              {% else %}
+              <img
+                src="{{ url_for('items.image_file',
+              filename=current_user.face_image_path) }}"
+                class="thumb"
+                alt="顔画像"
+              />
+              {% endif %}
+              <div class="navname">
+                <!-- ユーザー名の最初４文字のみを表示 -->
+                <p>{{ current_user.username[:4] }}</p>
+              </div>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </header>
+    <div class="space"></div>
+
+    <section class="">{% block content %} {% endblock %}</section>
+
+    <!-- 前のページに戻る -->
+    <script>
+      function goBack() {
+        window.history.back();
+      }
+    </script>
+
+    <!-- チャットボットのウィジェット -->
+    <script type="text/javascript">
+      (window.DocsBotAI = window.DocsBotAI || {}),
+        (DocsBotAI.init = function (c) {
+          return new Promise(function (e, o) {
+            var t = document.createElement("script");
+            (t.type = "text/javascript"),
+              (t.async = !0),
+              (t.src = "https://widget.docsbot.ai/chat.js");
+            var n = document.getElementsByTagName("script")[0];
+            n.parentNode.insertBefore(t, n),
+              t.addEventListener("load", function () {
+                window.DocsBotAI.mount({
+                  id: c.id,
+                  supportCallback: c.supportCallback,
+                  identify: c.identify,
+                  options: c.options,
+                  signature: c.signature,
+                });
+                var t;
+                (t = function (n) {
+                  return new Promise(function (e) {
+                    if (document.querySelector(n))
+                      return e(document.querySelector(n));
+                    var o = new MutationObserver(function (t) {
+                      document.querySelector(n) &&
+                        (e(document.querySelector(n)), o.disconnect());
+                    });
+                    o.observe(document.body, { childList: !0, subtree: !0 });
+                  });
+                }),
+                  t && t("#docsbotai-root").then(e).catch(o);
+              }),
+              t.addEventListener("error", function (t) {
+                o(t.message);
+              });
+          });
+        });
+    </script>
+    <script type="text/javascript">
+      DocsBotAI.init({ id: "PGI2VrMgnXv9NqmXMeFm/GJrKyyawVCHbI7KeRmFF" });
+    </script>
+
+    <div class="m-wrap"></div>
+    <footer class="g-footer">
+      <!-- ここにロゴ画像 -->
+      <div class="f-wrap">
+        <div class="f-logo">
+          <a
+            ><img
+              src="{{ url_for('static',filename='image/wlogo2.png') }}" /><img
+              src="{{ url_for('static',filename='image/logo2.png') }}"
+          /></a>
+        </div>
+        <p id="page-top">
+          <a href="#"><span>Page Top</span></a>
+        </p>
+        <nav class="f-nav">
+          <ul class="f-ul">
+            <li>
+              <a href="{{ url_for('items.index') }}">トップページ</a>
+            </li>
+            <li>
+              <a href="{{ url_for('support.topics') }}">お知らせ</a>
+            </li>
+            <li>
+              <a href="{{ url_for('support.contact') }}">お問い合わせ</a>
+            </li>
+            {% if current_user.is_authenticated %}
+            <li>
+              <a href="{{ url_for('auth.logout') }}">ログアウト</a>
+            </li>
+            {% endif %}
+          </ul>
+          <div class="nav-wrap">
+            <ul class="wrap-tel">
+              <li>TEL</li>
+              <li>052-551-1001</li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <p class="f-copy">2024 &copy; Copyright SCHOLA. All rights reserved.</p>
+    </footer>
+    <!-- <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"
+  ></script> -->
+    <script src="{{ url_for('static',filename='js/footer.js') }}"></script>
+  </body>
+</html>

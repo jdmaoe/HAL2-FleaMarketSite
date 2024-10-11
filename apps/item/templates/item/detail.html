@@ -1,0 +1,117 @@
+{% extends "item/base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_listing.css') }}" />
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block title %}
+商品詳細ページ
+{% endblock %}
+
+
+
+{% block content %}
+<main class="detail_main">
+  <div class="detailimg">
+    <ul class="left">
+      {% for image in item_images %}
+        <li class="">
+          <span><img src="{{ url_for('items.image_file', filename=image.image_path) }}" alt="出品画像"></span> 
+        </li>
+      <div class="lispace"></div>
+      {% endfor %}
+    </ul>
+    <div class="images">
+      <div class="zoom-area">
+        <img src="" />
+      </div>
+      <div class="right m-lens-container">
+        <img src="" alt="出品画像">
+        <div class="m-lens"></div>
+      </div>
+    </div>
+  </div>
+  <div class="detailtext">
+    <!-- 商品名 -->
+    <h2>
+      {{ item.name }}
+    </h2>
+    <!-- 商品価格 -->
+    <p>
+      <!-- 価格：￥{{ item.price }} -->
+      <!-- 金額を3桁区切りで表示 -->
+      価格：￥{{ '{:,}'.format(item.price) }}
+    </p>
+    <!-- 送料 -->
+    <p class="item_postage">
+      {% if item.postage == 0 %}
+        送料込み
+      {% else %}
+        <!-- 送料:￥{{ item.postage }} -->
+        <!-- 金額を3桁区切りで表示 -->
+        送料:￥{{ '{:,}'.format(item.postage) }}
+      {% endif %}
+    </p>
+    <!-- 商品説明 -->
+    <p class="item_descripton">
+      {{ item.description }}
+    </p>
+    <h3>商品の情報</h3>
+    <ul>
+      <li>
+        <h4>カテゴリー</h4>
+        <p>
+          {{ firstcategory.name }} >> {{ secondcategory.name }} >> {{ thirdcategory.name }}
+        </p>
+      </li>
+      <li>        
+        <!-- <h4>商品の状態</h4> -->
+        <!-- <p>{{ condition.name }}</p> -->
+        <!-- もしitem.moveflagがTrueなら商品の状態を表示しない -->
+        {% if item.movieflag %}
+        {% else %}
+          <h4>商品の状態</h4>
+          <p>{{ condition.name }}</p>
+        {% endif %}
+      </li>
+      <li>
+        <h4>出品日</h4>
+        <p>
+          {{ item.created_at.strftime('%Y年%m月%d日 %H:%M') }}
+        </p>
+      </li>
+    </ul>
+    
+    <h3>出品者</h3>
+    <p>
+      {{ sell_user.username }}
+    </p>
+
+    <div class="btnwrap">    
+      <!--購入フォームへのリンク-->
+      {% if current_user.is_authenticated %}
+        {% if current_user.id != sell_user.id %}
+          <a class="btn_04" href="{{ url_for('items.item_purchase', item_id=item.id) }}">購入する</a>
+        {% else %}
+        <a class="btn_04">あなたの出品</button>
+        {% endif %}
+      {% else %}
+        <a class="btn_04" href="{{ url_for('auth.signup') }}">ログインする</a>
+      {% endif %}
+      <a class="btn_04" href="{{ url_for('items.index') }}">トップに戻る</a>
+    </div>
+  </div>
+  <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"
+  ></script>
+  <script src="../../../static/js/item.js"></script>
+</main>
+{% endblock %}
+

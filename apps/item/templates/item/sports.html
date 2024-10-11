@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/common9.css') }}"
+    />
+  </head>
+  <body>
+    <div id="canvasContainer">
+      <a href="/" id="page-top">TOP</a>
+
+      <canvas id="c"></canvas>
+      <div class="emblem">Sporting Goods .</div>
+
+      <img src="static/image/foot.png" alt="" />
+    </div>
+    <div>
+      <article>
+        <h2>サッカー</h2>
+        <div>
+          <h3>S<span style="color: blue">O</span>CCER</h3>
+          <p>
+            サッカー用品です。<br />
+            スパイクやボール、ユニフォームなどを取りそろえております。
+          </p>
+          <div class="gallery">
+            <img src="static/image/soccer1.jpg" alt="" />
+            <img src="static/image/soccer2.jpg" alt="" />
+            <img src="static/image/soccer3.jpg" alt="" />
+          </div>
+        </div>
+      </article>
+      <article>
+        <h2>バスケットボール</h2>
+        <div>
+          <h3>B<span style="color: black">A</span>SKETBALL</h3>
+          <p>
+            バスケットボール用品です。<br />
+            シューズやボール、ユニフォームなどを取りそろえております。
+          </p>
+          <div class="gallery">
+            <img src="static/image/bas1.jpg" alt="" />
+            <img src="static/image/bas2.jpg" alt="" />
+            <img src="static/image/bas3.jpg" alt="" />
+          </div>
+        </div>
+      </article>
+      <article>
+        <h2>野球</h2>
+        <div>
+          <h3>B<span style="color: red">A</span>SEBALL</h3>
+          <p>
+            野球用品です。<br />
+            シューズやボール、バットなどを取りそろえております。
+          </p>
+          <div class="gallery">
+            <img src="static/image/base1.jpg" alt="" />
+            <img src="static/image/base2.jpg" alt="" />
+            <img src="static/image/base3.jpg" alt="" />
+          </div>
+        </div>
+      </article>
+      <article>
+        <h2>テニス</h2>
+        <div>
+          <h3>T<span style="color: yellow">E</span>NNIS</h3>
+          <p>
+            テニス用品です。<br />
+            ラケットやボール、ユニフォームなどを取りそろえております。
+          </p>
+          <div class="gallery">
+            <img src="static/image/ten1.jpg" alt="" />
+            <img src="static/image/ten2.jpg" alt="" />
+            <img src="static/image/ten3.jpg" alt="" />
+          </div>
+        </div>
+      </article>
+      <article>
+        <h2>陸上</h2>
+        <div>
+          <h3>T<span style="color: green">&</span>F</h3>
+          <p>
+            陸上用品です。<br />
+            スパイクやシューズ、バトンなどを取りそろえております。
+          </p>
+          <div class="gallery">
+            <img src="static/image/tra1.jpg" alt="" />
+            <img src="static/image/tra2.jpg" alt="" />
+            <img src="static/image/tra3.jpg" alt="" />
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/anime.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/common9.js') }}"></script>
+  </body>
+</html>
