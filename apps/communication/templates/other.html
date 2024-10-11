@@ -1,0 +1,76 @@
+{% extends "item/base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<link rel="stylesheet" href="{{ url_for('communication.static', filename='/css/style.css' ) }}" />
+<link rel="stylesheet" href="{{ url_for('mypage.static', filename='css/style_mypage.css') }}" />
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block title %}
+{{ other.username }}さんのブログ一覧
+{% endblock %}
+
+
+{% block content %}
+
+<div class="other-body">
+  <h2 class="board-tit">{{ other.username[:4] }}さんのブログ一覧</h2>
+
+<!--もしログインしているなら-->
+{% if current_user.is_authenticated %}
+  <div class="other-form-wrap">
+    <form action="{{ url_for('communication.follow', user_id=other.id) }}" method="post">
+      {{ other.username[:4] }} : 
+      {{ form.csrf_token }}
+      {{ form.submit() }}
+    </form>
+  </div>
+{% else %}
+  <input type="submit" value="フォローする"  disabled></input>
+  <p>フォローするにはログインしてください</p>
+{% endif %}
+
+
+
+{% for blog in blogs %}
+  <div class="twitter__container">
+    <!-- タイトル -->
+    <div class="twitter__title">
+      <span class="twitter-logo">{{ blog.Blog.title }}</span>
+    </div>
+
+    <!-- ▼タイムラインエリア scrollを外すと高さ固定解除 -->
+    <div class="twitter__contents scroll">
+      <div class="twitter__block">
+        <a href="{{ url_for('communication.other',user_id=blog.User.id) }}">
+          {% if blog.User.face_image_path == None %}
+          <figure>
+            <img src="{{ url_for('items.image_file',filename='thumb.png') }}" class="thumb" alt="汎用顔画像" />
+          </figure>
+          {% else %}
+          <figure>
+            <img src="{{ url_for('items.image_file',filename=blog.User.face_image_path) }}" alt="{{ blog.Blog.title }}の画像"/>
+          </figure>
+          {% endif %}
+        </a>
+        <div class="twitter__block-text">
+          <div class="name">{{ blog.User.username }}さん</div>
+          <div class="date">{{ blog.Blog.created_at.strftime('%Y/%m/%d %H:%M:%S') }}</div>
+          <div class="text">
+            <div class="text_body">{{ blog.Blog.body }}</div>
+            <div class="in-pict">
+              <img src="{{ url_for('items.image_file',filename=blog.Blog.image_path) }}" alt="{{ blog.Blog.title }}の画像" />
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- ここに吹き出しやスタンプのタグを追加していく -->
+    </div>
+    <!--　▲タイムラインエリア ここまで -->
+  </div>
+{% endfor %}
+</div>
+{% endblock %}

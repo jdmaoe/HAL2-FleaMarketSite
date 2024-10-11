@@ -1,0 +1,95 @@
+{% extends "item/base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<link rel="stylesheet" href="{{ url_for('communication.static', filename='/css/style.css' ) }}" />
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block title %}
+掲示板トップ
+{% endblock %}
+
+{% block content %}
+
+<div class="boardbody">
+  <h2 class="board-tit">掲示板</h2>
+
+  <div class="modal_wrap">
+    <input class="modal_input" id="trigger" type="checkbox">
+    <div class="modal_overlay">
+      <label for="trigger" class="modal_trigger"></label>
+      <div class="modal_content_2">
+        <label for="trigger" class="close_button">✖️</label>
+        <div class="formWrap">
+          <form action="{{ url_for('communication.create_board') }}" method="post" enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            {{ form.hidden_tag() }}
+            <div class="InputWrap">
+              <label>タイトル</label><br>
+              {{ form.title(class="form-control") }}
+            </div>
+            {% for error in form.title.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+
+            <div class="TextareaWrap">
+              <labe>内容</label><br>
+              {{ form.body(class="form-control") }}
+            </div>
+            {% for error in form.body.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+
+            <div class="buttonWrap">
+            {{ form.submit(class="btn btn-primary") }}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="center">
+    {% if current_user.is_authenticated %}
+    <div class="labelWrap">
+      <label for="trigger"><i>投稿する</i></label>  
+    </div>
+    {% else %}
+    <div class="buttonWrap2">
+      <a href="{{ url_for('auth.signup') }}"><button><i>ログインして投稿</i></button></a>
+    </div>
+    {% endif %}
+  </div>
+
+
+  {% if boards %}
+
+  <div>
+    {% for board in boards %}
+    
+      <h4>
+        {{ board.User.username }}
+      </h4>
+      <div class="box3-3">
+        <a href="{{ url_for('communication.board_detail',board_id=board.Board.id) }}">
+          <p>{{ board.Board.title }}</p>
+        </a>
+        <h4 class="board-day">
+          {{ board.Board.created_at.strftime('%Y/%m/%d %H:%M:%S') }}
+        </h4>
+      </div><hr>
+
+    {% endfor %}
+  </div>
+
+  {% else %}
+
+    <p>まだ投稿がありません</p>
+
+  {% endif %}
+
+</div>
+  {% endblock  %}
+  

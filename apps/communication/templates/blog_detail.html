@@ -1,0 +1,34 @@
+{% extends "item/base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<link rel="stylesheet" href="{{ url_for('communication.static', filename='/css/style.css' ) }}" />
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block title %}
+ブログ詳細
+{% endblock %}
+
+{% block content %}
+
+<div>
+  <a href="{{ url_for('communication.other',user_id=blog.User.id) }}">
+    <h2>{{ blog.User.username }}さん</h2>
+  </a>
+  <section>
+    <img
+      src="{{ url_for('items.image_file',
+      filename=blog.Blog.image_path) }}" alt="{{ blog.Blog.title }}の画像"
+    />
+  </section>
+  <h2>{{ blog.Blog.title }}</h2>
+  <p>{{ blog.Blog.body }}</p>
+  <!--投稿時間を日付/時/分/秒で表す-->
+  <p>{{ blog.Blog.created_at.strftime('%Y/%m/%d %H:%M:%S') }}</p>
+</div>
+
+
+{% endblock %}

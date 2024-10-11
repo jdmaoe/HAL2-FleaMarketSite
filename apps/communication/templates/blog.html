@@ -1,0 +1,150 @@
+{% extends "item/base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<link rel="stylesheet" href="{{ url_for('communication.static', filename='/css/style.css' ) }}" />
+<link rel="stylesheet" href="{{ url_for('communication.static', filename='/css/thumb.css' ) }}" />
+{% endblock %}
+
+{% block title %}
+ブログ一覧
+{% endblock %}
+
+{% block content %}
+
+
+<div class="blog-body">
+  <h2 class="board-tit">ブログ</h2>
+
+  <div class="modal_wrap">
+    <input class="modal_input" id="trigger" type="checkbox">
+    <div class="modal_overlay">
+      <label for="trigger" class="modal_trigger"></label>
+      <div class="modal_content">
+        <label for="trigger" class="close_button">✖️</label>
+        <div class="formWrap">
+          <form method="POST" action="{{ url_for('communication.CPostBlog') }}" enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            {{ form.hidden_tag() }}
+            <div class="InputWrap">
+              <label for="title">タイトル</label><br>
+              {{ form.title(class="form-control", id="title") }}
+            </div>
+            <div class="TextareaWrap">
+              <label for="body">内容</label><br>
+              {{ form.body(class="form-control", id="body") }}
+            </div>
+
+            <div class="InputWrap">
+              <label for="image">画像アップロード</label><br>
+              <!-- エラーメッセージを表示する要素 -->
+              <div id="error-message-image" class="error-image"></div>
+              <label class="gyazouLabel"><div class="image_upload">{{ form.image(class="form-control", id="image") }} <p>選択されていません</p></div></label>
+            </div>
+            <div class="buttonWrap">
+              <button type="submit">投稿する</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class=center>
+    {% if current_user.is_authenticated %}
+    <div class="labelWrap">
+      <label for="trigger"><i>投稿する</i></label>
+    </div>
+    {% else %}
+    <div class="buttonWrap2">
+      <a href="{{ url_for('auth.signup') }}"><button><i>ログインして投稿</i></button></a>
+    </div>
+    {% endif %}
+  </div>
+
+  {% for blog in blogs %}
+  <div class="twitter__container">
+    <!-- タイトル -->
+    <div class="twitter__title">
+      <span class="twitter-logo">{{ blog.Blog.title }}</span>
+    </div>
+
+    <!-- ▼タイムラインエリア scrollを外すと高さ固定解除 -->
+    <div class="twitter__contents scroll">
+      <div class="twitter__block">
+        <a href="{{ url_for('communication.other',user_id=blog.User.id) }}">
+          {% if blog.User.face_image_path == None %}
+          <figure>
+            <img src="{{ url_for('items.image_file',filename='thumb.png') }}" class="thumb" alt="汎用顔画像" />
+          </figure>
+          {% else %}
+          <figure>
+            <img src="{{ url_for('items.image_file',filename=blog.User.face_image_path) }}" class="thumb" alt="顔画像">
+          </figure>
+          {% endif %}
+        </a>
+        <div class="twitter__block-text">
+          <div class="name">{{ blog.User.username }}さん</div>
+          <div class="date">
+            {% set time_difference = current_time - blog.Blog.created_at %}
+            {% if time_difference.days > 0 %}
+            {{ time_difference.days }}日前
+            {% elif time_difference.seconds < 3600 %}
+            {{ time_difference.seconds // 60 }}分前
+            {% elif time_difference.seconds < 86400 %}
+            {{ time_difference.seconds // 3600 }}時間前
+            {% else %}
+            {{ sell_item.Item.created_at.strftime('%Y-%m-%d') }}
+            {% endif %}
+          </div>
+          <div class="text">
+            <div class="text_body">{{ blog.Blog.body }}</div>
+            <div class="in-pict">
+              <img src="{{ url_for('items.image_file',filename=blog.Blog.image_path) }}" alt="{{ blog.Blog.title }}の画像" />
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- ここに吹き出しやスタンプのタグを追加していく -->
+    </div>
+    <!--　▲タイムラインエリア ここまで -->
+  </div>
+  {% endfor %}
+
+
+</div>
+
+
+
+{% block js %}
+<script type="text/javascript" src="{{ url_for('communication.static', filename='js/main.js') }}"></script>
+<script>
+$(document).ready(function(){
+  // ファイルが選択されたときの処理
+  $('input[type="file"]').change(function(){
+      // 選択されたファイルの情報を取得
+      var fileName = $(this).val().split('\\').pop();
+      // 取得したファイル名を表示する要素に表示
+      $('p').text(fileName);
+  });
+});
+
+$(document).ready(function(){
+    // フォームが送信されたときの処理
+    $('form').submit(function(e){
+        // 画像ファイルのinput要素を取得
+        var imageInput = $('input[type="file"]');
+        // 選択されているファイルがあるかチェック
+        if(imageInput[0].files.length === 0){
+            // ファイルが選択されていない場合は、デフォルトのフォーム送信をキャンセル
+            e.preventDefault();
+            // エラーメッセージを生成
+            var errorMessage = "<p class='error'>画像ファイルを選択してください。</p>";
+            // エラーメッセージを指定した要素に挿入
+            $('#error-message-image').html(errorMessage);
+        }
+    });
+});
+</script>
+{% endblock %}
+  
+{% endblock %}

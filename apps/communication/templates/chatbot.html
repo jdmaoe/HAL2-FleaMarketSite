@@ -1,0 +1,50 @@
+{% extends "item/base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<link rel="stylesheet" href="{{ url_for('communication.static', filename='/css/style.css' ) }}" />
+<link rel="stylesheet" href="{{ url_for('mypage.static', filename='css/style_mypage.css') }}" />
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block title %}
+チャットボット
+{% endblock %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with ChatBot</title>
+    <link rel="stylesheet" href="{{ url_for('communication.static', filename='/css/style.css' ) }}" />
+</head>
+<body class="chat2body">
+    <div class="container chat2-container">
+        <h1>ChatBot</h1>
+
+        <div id="chat-messages">
+            {% if chat_messages %}
+                {% for chat_message in chat_messages %}
+                    <p class="{{ 'sent chat2-sent' if chat_message.sender_id == current_user.id else 'received chat2-received' }}">
+                        {{ chat_message.body }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <form class="chat2-form" method="POST" action="{{ url_for('communication.chatbot',user_id=current_user.id)}}">
+            {{ form.hidden_tag() }}
+            {{ form.message_body.label }}
+            {{ form.message_body(size=30, class="chat2-input") }}
+            {{ form.submit(class="chat2-button") }}
+            {% endblock %}
+        </form>
+    </div>
+</body>
+</html>

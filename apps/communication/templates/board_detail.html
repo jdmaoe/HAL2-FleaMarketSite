@@ -1,0 +1,125 @@
+{% extends "item/base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<link rel="stylesheet" href="{{ url_for('communication.static', filename='/css/style.css' ) }}" />
+<link rel="stylesheet" href="{{ url_for('communication.static', filename='/css/thumb.css' ) }}" />
+{% endblock %}
+
+
+{% block title %}
+掲示板詳細
+{% endblock %}
+
+{% block content %}
+
+<div class="detail-body">
+  <div class="detail-tit">
+    <h3>
+      {{ board.Board.title }}
+    </h3>
+  </div>
+  <div class="board_detail_wrap">
+    <div>
+      <h3>
+        ユーザー名：{{ board.User.username }}
+      </h3>
+    </div>
+    <div>
+      <h4 class="detail_board-day">
+        {{ board.Board.created_at.strftime('%Y/%m/%d %H:%M:%S') }}
+      </h4>
+    </div>
+    <div class="BD-h4Wrap">
+      <h4>
+        {{ board.Board.body }}
+      </h4>
+    </div>
+    <br>
+
+    <form action="{{ url_for('communication.comment', board_id=board.Board.id) }}" method="post"
+      enctype="multipart/form-data" novalidate="novalidate">
+      {{ form.csrf_token }}
+      {{ form.hidden_tag() }}
+
+      <div class="saranWrap">
+        <!-- エラーメッセージを表示する要素 -->
+        <div id="error-message-comment" class="error-comment"></div>
+        <div class="replyWrap">
+          <div class="commentWrap">
+            <label class="label1">
+              コメントする
+              <span> {{ form.body(class="form-control") }} </span>
+            </label>
+          </div>
+          <div class="board-btn">
+            <label> {{ form.submit(class="btn btn-primary") }} </label>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+
+
+
+  {% for comment in comments %}
+  <div class="comment-card">
+    <div class="BD-iconWrap">
+      {% if comment.User.face_image_path == None %}
+      <img src="{{ url_for('static',filename='image/thumb.png') }}" class="thumb" alt="汎用顔画像" />
+      {% else %}
+      <img src="{{ url_for('items.image_file',
+          filename=comment.User.face_image_path) }}" class="thumb" alt="顔画像" />
+      {% endif %}
+      <p class="comment-user">
+        {{ comment.User.username[:4] }}
+      </p>
+    </div>
+    <div class="detail-com">
+      <p class="BD-comment">
+        {{ comment.Comment.body }}
+      </p>
+      <p class="board-detail-day">
+        コメント：
+        {% set time_difference = current_time - comment.Comment.created_at %}
+        {% if time_difference.days > 0 %}
+        {{ time_difference.days }}日前
+        {% elif time_difference.seconds < 3600 %}
+        {{ time_difference.seconds // 60 }}分前
+        {% elif time_difference.seconds < 86400 %}
+        {{ time_difference.seconds // 3600 }}時間前
+        {% else %}
+        {{ sell_item.Item.created_at.strftime('%Y-%m-%d') }}
+        {% endif %}
+      </p>
+      <!-- {{ comment.Comment.created_at.strftime('%Y/%m/%d %H:%M:%S') }} -->
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+
+{% block js %}
+<script>
+$(document).ready(function(){
+  // フォームが送信されたときの処理
+  $('form').submit(function(e){
+      // コメントの入力内容を取得
+      var commentInput = $('textarea[name="body"]').val();
+      // コメントが空かチェック
+      if(commentInput.trim() === ''){
+          // デフォルトのフォーム送信をキャンセル
+          e.preventDefault();
+          // エラーメッセージを生成
+          var errorMessage = "<span style='color: red;'>コメントを入力してください。</span>";
+          // エラーメッセージを表示するための要素を取得し、メッセージを挿入
+          $('#error-message-comment').html(errorMessage);
+      }
+  });
+});
+</script>
+{% endblock %}
+
+{% endblock %}

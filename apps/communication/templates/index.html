@@ -1,0 +1,39 @@
+{% extends "item/base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<link rel="stylesheet" href="{{ url_for('communication.static', filename='/css/style.css' ) }}" />
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block title %}
+コミュニケーショントップ
+{% endblock %}
+
+{% block content %}
+
+
+
+<body class="indexbody">
+  
+
+  <ul class="indexUl">
+    <li class="indexLi">
+      <a href="{{ url_for('communication.Chat_List') }}">チャット</a>
+    </li>
+    <li class="indexLi">
+      <a href="{{ url_for('communication.chatbot', user_id=current_user.id) }}">チャットbot</a>
+    </li>
+    <li class="indexLi">
+      <a href="{{ url_for('communication.board') }}">掲示板</a>
+    </li>
+    <li class="indexLi">
+      <a href="{{ url_for('communication.blog') }}">ブログ</a>
+    </li>
+  </ul>
+
+</body>
+
+{% endblock %}

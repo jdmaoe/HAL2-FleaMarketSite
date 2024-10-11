@@ -1,0 +1,63 @@
+@charset "UTF-8";
+
+.thumb {
+  width: 160px;
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  object-fit: cover;
+}
+
+.thumb:hover {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+}
+
+.thumb:active {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4);
+}
+
+.follow .follow-list .thumb {
+  width: 40px;
+  height: 40px;
+  cursor: none;
+}
+
+.follow .follower-list .thumb {
+  width: 40px;
+  height: 40px;
+  cursor: none;
+}
+
+.comment-card .thumb {
+  width: 60px;
+  height: 60px;
+  margin-right: 50px;
+}
+
+.user-card .thumb {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
+}
+
+.trading-message .thumb {
+  width: 60px;
+  height: 60px;
+}
+
+.navface .thumb {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 0.5vh;
+}
+
+.card-seller .thumb {
+  width: 60px;
+  height: 60px;
+}
