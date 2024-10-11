@@ -1,0 +1,77 @@
+{% extends "item/base.html" %} {% block css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/style_item.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('support.static', filename='css/topics.css') }}"
+/>
+{% endblock %} {% block title %} トピックス一覧 {% endblock %} {% block content
+%}
+<div class="topixcontainer">
+  <div class="topic">
+    <h2>経営体制変更のお知らせ</h2>
+    <p class="summary">
+      株式会社SCHOLA（以下、SHCOLA）は、経営体制の変更について決定いたしましたので、お知らせいたします。
+    </p>
+
+    <button class="show-details topixbtn">詳細を見る</button>
+    <div class="details">
+      <p>
+        株式会社SCHOLA（以下、SCHOLA）は、経営体制の変更について決定いたしましたので、お知らせいたします。2024年1月1日付で執行役員
+        CEO Marketplaceの伊里洋海が執行役 SVP of Japan
+        Region（以下、SCHOLAグループ日本事業責任者）に就任いたします。また、併せて同日付で株式会社TeamJ
+        COO Fintech COOの石田匠人が執行役員 CEO Fintech 兼
+        株式会社TeamJ代表取締役 CEOに就任いたします。
+      </p>
+      <p>
+        伊里はこれまで、執行役員 CEO Marketplace 兼 CEO
+        Fintechとして、MarketplaceとFintechを横断する様々な施策に取り組んでまいりました。今後はSCHOLAグループ日本事業責任者として、日本国内で展開する各種事業の戦略強化に注力し、事業成長に向けたグループシナジー創出をさらに強化してまいります。
+      </p>
+      <p>
+        石田は2021年に株式会社TeamJに入社し、スマホ決済サービス「SCHOペイ」のグロースを担当した後に、FinTech領域の事業成長を管掌してまいりました。今後は執行役員
+        CEO Fintech 兼 株式会社TeamJ代表取締役
+        CEOとして”循環型金融”の実現に向けたさらなる成長加速を目指してまいります。
+      </p>
+      <button class="hide-details topixbtn">詳細を閉じる</button>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h2>海外との越境販売について</h2>
+    <p class="summary">SCHOLA、「SCHOLA Shops」で海外との越境販売を開始</p>
+
+    <button class="show-details topixbtn">詳細を見る</button>
+    <div class="details">
+      <p>
+        株式会社SCHOLA（以下、SCHOLA）は、2023年12月1日より、スマホ1つで誰でも簡単にネットショップを開設できるEコマースプラットフォーム「SCHOLA
+        Shops（SCHOLAショップス）」において、越境販売を開始いたします。これにより、「SCHOLA
+        Shops」の出店者が販売している商品を越境EC事業者を通して海外の利用者に販売できるようになります。
+      </p>
+      <p>
+        さらに、海外市場における越境販売の経路拡大に向け、新たに39社の越境EC事業者と連携し、越境販売での越境EC事業者との連携が累計50社に達したことをお知らせいたします。
+      </p>
+      <button class="hide-details topixbtn">詳細を閉じる</button>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h2>「顔認証」の導入について</h2>
+    <p class="summary">
+      自分の顔による認証で、よりスムーズにご利用いただけるように
+    </p>
+
+    <button class="show-details topixbtn">詳細を見る</button>
+    <div class="details">
+      <p>
+        株式会社SCHOLA（以下、SHCOLA）は、「SCHOLA」へのログイン時にパスワードレスの生体認証機能である「顔認証」を導入したことをお知らせいたします。
+      </p>
+      <button class="hide-details topixbtn">詳細を閉じる</button>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('support.static', filename='js/topics.js') }}"></script>
+
+{% endblock %}

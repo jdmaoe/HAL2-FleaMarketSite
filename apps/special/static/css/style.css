@@ -1,0 +1,62 @@
+body {
+  margin: 0;
+  /* overflow: hidden; */
+}
+canvas {
+  display: block;
+  background-image: url('/special/static/image/neko_bg.png');
+  background-size: 100% 100%;
+  /* 水平方向の中央に配置 */
+  margin: 0 auto;
+}
+
+.game-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 100px;
+}
+
+.game-container a {
+  text-decoration: none;
+  color: #000;
+  margin: 50px;
+}
+
+.game-card {
+  width: 400px;
+  height: 800px;
+  background-color: #fff;
+  border-radius: 15px 15px 15px 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.game-card img {
+  /* 親要素のサイズまで */
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+
+.game-card h1 {
+  font-size: 2rem;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.game-card p {
+  font-size: 1.2rem;
+}
+
+.game-card p:last-child {
+  margin-bottom: 20px;
+}
+
+.text-left {
+  text-align: left;
+  padding: 0 20px;
+  /* 行間 */
+  line-height: 2;
+} 

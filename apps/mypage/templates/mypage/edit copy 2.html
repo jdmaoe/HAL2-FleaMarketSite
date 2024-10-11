@@ -1,0 +1,266 @@
+{% extends 'item/base.html' %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<link rel="stylesheet" href="{{ url_for('mypage.static', filename='css/style_mypage.css') }}" />
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/miniboot.css') }}" /> -->
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}" /> -->
+{% endblock %}
+
+
+{% block title %}
+プロフィール編集
+{% endblock %}
+
+{%block content %}
+<!--プロフィール画面に戻るリンク-->
+<!-- <p>
+  <a href="{{ url_for('mypage.profile', user_id=user.id) }}">プロフィール画面へ</a>
+</p> -->
+
+
+<form id="editForm" name="editForm" action="{{ url_for('mypage.edit_user', user_id=user.id) }}" class="editcontainer"
+  enctype="multipart/form-data" method="post" novalidate="novalidate">
+  <div class="tab">
+    <ul class="tab__menu">
+      <li class="tab__menu-item is-active" data-tab="01">プロフィール</li>
+      <li class="tab__menu-item" data-tab="02">支払情報</li>
+    </ul>
+    <div class="tab__panel">
+      <div class="tab__panel-box tab__panel-box001 is-show" data-panel="01">
+        {% for message in get_flashed_messages() %}
+        <div class="flash-area">
+          <span class="form-flash" id="form-flash">{{ message }}</span>
+        </div>
+        {% endfor %}
+        <div class="flash-area">
+          <span class="form-flash"><small id="formError" class="error-message"></small></span>
+        </div>
+
+        <!-- CSRFトークン -->
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <!-- ユーザー名 -->
+        <p class="Form-Item">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required red" for="userName">必須</label>ユーザー名
+        </p>
+        <input type="text" class="Form-Item-Input" id="userName" name="userName" value={{ user.username }}>
+        <small id="userNameError" class="error-message"></small>
+        </p>
+
+        <!-- メールアドレス -->
+        <p class="Form-Item">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required red" for="email">必須</label>メールアドレス
+        </p>
+        <input type="text" class="Form-Item-Input" id="email" name="email" value={{ user.email }}>
+        <small id="emailError" class="error-message"></small>
+        </p>
+
+        <!-- パスワード -->
+        <p class="Form-Item">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required" for="password">任意</label>パスワード
+        </p>
+        <input type="text" class="Form-Item-Input" id="password" name="password">
+        <small id="passwordError" class="error-message"></small>
+        </p>
+
+        <!-- 電話番号 -->
+        <p class="Form-Item">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required" for="tel">任意</label>電話番号
+        </p>
+        <input type="text" class="Form-Item-Input" id="tel" name="tel"
+          value="{% if current_user.tel == None or current_user.tel == 'None' %}{% else %}{{ current_user.tel }}{% endif %}">
+        <small id="telError" class="error-message"></small>
+        </p>
+
+        <!-- 郵便番号 -->
+        <p class="Form-Item">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required" for="postcode">任意</label>郵便番号
+        </p>
+        <input type="text" class="Form-Item-Input" id="postcode" name="postcode"
+          value="{% if current_user.postcode == None or current_user.postcode == 'None' %}{% else %}{{ current_user.postcode }}{% endif %}">
+        <small id="postcodeError" class="error-message"></small>
+        </p>
+
+        <!-- 住所 -->
+        <p class="Form-Item">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required" for="address">任意</label>住所
+        </p>
+        <input type="text" class="Form-Item-Input" id="address" name="address"
+          value="{% if current_user.address == None or current_user.address == 'None' %}{% else %}{{ current_user.address }}{% endif %}">
+        <small id="addressError" class="error-message"></small>
+        </p>
+
+        <!-- 建物名・部屋番号 -->
+        <p class="Form-Item">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required" for="building_name_number">任意</label>建物名・部屋番号
+        </p>
+        <input type="text" class="Form-Item-Input" id="building_name_number" name="building_name_number"
+          value="{% if current_user.building_name_number == None or current_user.building_name_number == 'None' %}{% else %}{{ current_user.building_name_number }}{% endif %}">
+        <small id="building_name_numberError" class="error-message"></small>
+        </p>
+
+        <!-- 顔画像 -->
+        <div class="face-image">
+          <p>現在の顔画像</p>
+          {% if user.face_image_path == None %}
+          <img src="{{ url_for('static',filename='image/thumb.png') }}" alt="汎用顔画像" />
+          {% else %}
+          <img src="{{ url_for('items.image_file',
+              filename=user.face_image_path) }}" alt="顔画像" />
+          {% endif %}
+        </div>
+        <p class="Form-Item">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required" for="face_image">任意</label>顔画像
+        </p>
+        <input type="file" class="" id="face_image" name="face_image" accept="image/jpeg, image/png,image/jpg">
+        <small id="face_imageError" class="error-message"></small>
+        </p>
+        <p>キャプチャ画像</p>
+        <img class="cap" id="cap" src="{{ url_for('auth.video_feed') }}" style="width: 50%; height: 50%" />
+        <button type="button" id="captureButton" class="cameraicon">
+          <img class="camerabutton" src="{{ url_for('static',filename='image/camera.png') }}" alt="">
+        </button>
+        <p id="capmessage" class="capmessage">キャプチャ画像が撮影されました</p>
+
+      </div>
+      <div class="tab__panel-box tab__panel-box002" data-panel="02">
+
+        <!-- クレジットカード番号 -->
+        <p class="Form-Item" style="margin-top: 50px;">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required" for="cardnumber">任意</label>クレジットカード番号
+        </p>
+        <input type="text" class="Form-Item-Input" id="cardnumber" name="cardnumber"
+          value="{% if pay_user.u_cardnumber == None or current_user.u_cardnumber == 'None' %}{% else %}{{ pay_user.u_cardnumber }}{% endif %}">
+        <small id="cardnumberError" class="error-message"></small>
+        </p>
+
+
+        <!-- 有効期限（年） -->
+        <p class="Form-Item">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required" for="goodthru_year">任意</label>有効期限（年）
+        </p>
+        <!-- プルダウンフォーム-->
+        <select class="Form-Item-Input" id="goodthru_year" name="goodthru_year" placeholder="有効期限（年）">
+          {% for i in range(24, 34) %}
+          <option value="{{ i }}" {% if pay_user.u_goodthru_year==i %}selected{% endif %}>{{ i }}</option>
+          {% endfor %}
+
+        </select>
+        </p>
+
+        <!-- 有効期限（月） -->
+        <p class="Form-Item">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required" for="goodthru_month">任意</label>有効期限（月）
+        </p>
+        <!-- プルダウンフォーム-->
+        <select class="Form-Item-Input" id="goodthru_month" name="goodthru_month" placeholder="有効期限（月）">
+          {% for i in range(1, 13) %}
+          {% if pay_user.u_goodthru_month == i %}
+          <option value="{{ i }}" selected>{{ i }}</option>
+          {% else %}
+          <option value="{{ i }}">{{ i }}</option>
+          {% endif %}
+          {% endfor %}
+        </select>
+        </p>
+
+        <!-- クレジットカード名義人 -->
+        <p class="Form-Item">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required" for="cardnominee">任意</label>クレジットカード名義人
+        </p>
+        <input type="text" class="Form-Item-Input" id="cardnominee" name="cardnominee"
+          value="{% if pay_user.u_cardnominee == None or current_user.u_cardnominee == 'None' %}{% else %}{{ pay_user.u_cardnominee }}{% endif %}">
+        <small id="cardnomineeError" class="error-message"></small>
+        </p>
+        <!-- 金融機関コード -->
+        <p class="Form-Item">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required" for="bankcode">任意</label>金融機関コード
+        </p>
+        <input type="text" class="Form-Item-Input" id="bankcode" name="bankcode"
+          value="{% if pay_user.u_bankcode == None or current_user.u_bankcode == 'None' %}{% else %}{{ pay_user.u_bankcode }}{% endif %}">
+        <small id="bankcodeError" class="error-message"></small>
+        </p>
+
+        <!-- 支店コード -->
+        <p class="Form-Item">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required" for="branchcode">任意</label>支店コード
+        </p>
+        <input type="text" class="Form-Item-Input" id="branchcode" name="branchcode"
+          value="{% if pay_user.u_branchcode == None or current_user.u_branchcode == 'None' %}{% else %}{{ pay_user.u_branchcode }}{% endif %}">
+        <small id="branchcodeError" class="error-message"></small>
+        </p>
+
+        <!-- 預金種目 -->
+        <p class="Form-Item">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required" for="deposititem">任意</label>預金種目
+        </p>
+        <!-- プルダウンフォーム-->
+        <select class="Form-Item-Input" id="deposititem" name="deposititem" placeholder="預金種目">
+          <option value="1">普通</option>
+          <option value="2">当座</option>
+        </select>
+        </p>
+
+        <!-- 口座番号 -->
+        <p class="Form-Item">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required" for="accountnumber">任意</label>口座番号
+        </p>
+        <input type="text" class="Form-Item-Input" id="accountnumber" name="accountnumber"
+          value="{% if pay_user.u_accountnumber == None or current_user.u_accountnumber == 'None' %}{% else %}{{ pay_user.u_accountnumber }}{% endif %}">
+        <small id="accountnumberError" class="error-message"></small>
+        </p>
+
+        <!-- 口座名義人 -->
+        <p class="Form-Item">
+        <p class="Form-Item-Label">
+          <label class="Form-Item-Label-Required" for="accountnominee">任意</label>口座名義人
+        </p>
+        <input type="text" class="Form-Item-Input" id="accountnominee" name="accountnominee"
+          value="{% if pay_user.u_accountnominee == None or current_user.u_accountnominee == 'None' %}{% else %}{{ pay_user.u_accountnominee }}{% endif %}">
+        <small id="accountnomineeError" class="error-message"></small>
+        </p>
+
+      </div>
+    </div>
+  </div>
+  <!-- 更新ボタン -->
+  <p><input type="submit" value="更新" class="button" /></p>
+</form>
+
+<form action="{{ url_for('mypage.delete_user', user_id=user.id) }}" method="POST" class="editcontainer" novalidate>
+  <!-- CSRFトークン -->
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input type="submit" value="退会する" class="buttondenger" />
+</form>
+
+
+
+{% block js %}
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="{{ url_for('mypage.static', filename='js/edit.js') }}"></script>
+<script src="{{ url_for('mypage.static', filename='js/camera.js') }}"></script>
+<script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
+
+{% endblock %}
+
+
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "item/base.html" %} {% block css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/style_item.css') }}"
+/>
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" /> -->
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/miniboot.css') }}"
+/>
+
+{% endblock %} {% block js %} {% endblock %} {% block title %}
+お問い合わせ内容確認 {% endblock %} {% block content %}
+
+<div class="container">
+  <h2 class="contact" style="margin: 50px 0 50px 0">
+    お問い合わせ内容をご確認ください
+  </h2>
+
+  <ul class="list-group">
+    <li class="list-group-item active">メールアドレス</li>
+    <li class="list-group-item">{{ email }}</li>
+    <li class="list-group-item active">ユーザー名</li>
+    <li class="list-group-item">{{ name }}</li>
+    <li class="list-group-item active">お問い合わせ内容</li>
+    <li class="list-group-item">{{ message }}</li>
+  </ul>
+
+  <form
+    action="{{ url_for('support.contact_complete') }}"
+    method="post"
+    class="contact-form"
+  >
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    <input type="hidden" name="email" value="{{ email }}" />
+    <input type="hidden" name="name" value="{{ name }}" />
+    <input type="hidden" name="message" value="{{ message }}" />
+
+    <div role="group" aria-label="Basic example">
+      <button
+        type="button"
+        class="btn btn-primary btn-lg btn-contact"
+        onclick="history.back()"
+      >
+        修正する
+      </button>
+      <button type="submit" class="btn btn-primary btn-lg btn-contact">
+        送信する
+      </button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

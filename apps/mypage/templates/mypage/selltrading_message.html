@@ -1,0 +1,207 @@
+{% extends 'item/base.html' %} {% block css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/style_item.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('mypage.static', filename='css/style_mypage.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/miniboot.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('mypage.static', filename='css/trading_message.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('communication.static', filename='/css/thumb.css' ) }}"
+/>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
+  rel="stylesheet"
+/>
+{% endblock %} {% block js %} {% endblock %} {% block title %} 購入取引中連絡 {%
+endblock %} {% block content %}
+
+<div class="trading-container">
+  <div class="trading-item bg-light p-5 ml-3 mr-3">
+    <div class="bt-line text-center mb-4">
+      <h4 class="mb-4">商品の発送状態</h4>
+      {% if item.status==2 %}
+      <div class="mb-4 bt-line shippingtext">
+        <p>商品が発送されていません。</p>
+      </div>
+      <div class="mt-4 mb-4 text-center">
+        <form
+          action="{{ url_for('mypage.selltrading_message', user_id=user.id, item_id=item.id) }}"
+          method="post"
+          novalidate="novalidate"
+        >
+          {{ form_s.csrf_token }}
+          <div class="form-check">
+            {{ form_s.shipping_contact(class="form-check-input") }}
+            <label for="shipping_contact" class="form-check-label checkboxlabel">
+              商品発送の連絡をする
+            </label>
+          </div>
+          <div class="mt-2 mb-4">
+            <div id="submitarea">
+              <label>
+                {{ form_s.submit(class="item-status-btn") }}
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
+      {% else %}
+      <p class="mb-4 shippingtext">商品が発送されました。</p>
+      {% endif %}
+    </div>
+
+    <div class="productinfo">
+      <h4 class="mb-4">商品情報</h4>
+      <div class="detailwrap">
+        {% if seller.face_image_path == None %}
+        <img
+          src="{{ url_for('static', filename='image/thumb.png') }}"
+          class="thumb"
+          alt="汎用顔画像"
+        />
+        {% else %}
+        <img
+          src="{{ url_for('items.image_file', filename=seller.face_image_path) }}"
+          class="thumb"
+          alt="顔画像"
+        />
+        {% endif %}
+        <div class="detail">
+          <h5>出品者</h5>
+          <p>{{ seller.username }}さん</p>
+          <h5>商品名</h5>
+          <p>{{ item.name }}</p>
+          <h5>商品価格</h5>
+          <p>￥{{ item.price }}</p>
+          <h5>商品概要</h5>
+          <p>{{ item.description }}</p>
+        </div>
+      </div>
+      <div class="imgwrap">
+        {% for image in item_images %}
+        <figure>
+          <img
+            src="{{ url_for('items.image_file', filename=image.image_path) }}"
+            alt="出品画像"
+            class="img-fluid img-thumbnail"
+          />
+        </figure>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="trading-message p-5">
+    <div class="bt-line2">
+      <h4 class="mb-4 text-center">取引メッセージ</h4>
+      <form
+        action="{{ url_for('mypage.trading_message', user_id=user.id, item_id=item.id) }}"
+        method="post"
+        novalidate="novalidate"
+      >
+        {{ form_m.csrf_token }}
+        <div class="form-group text-center">
+          {{ form_m.message(class="form-control mb-4") }}  
+          {{ form_m.submit(class="item-message-btn mb-4") }}
+        </div>
+      </form>
+    </div>
+
+    {% if messages %} {% for message in messages %} {% if message.User.id ==
+    user.id %}
+    <div class="message-box border-bottom">
+      <div class="col-lg-2 p-4 trading-message">
+        {% if message.User.face_image_path == None %}
+        <img
+          src="{{ url_for('static', filename='image/thumb.png') }}"
+          class="thumb"
+          alt="汎用顔画像"
+        />
+        {% else %}
+        <img
+          src="{{ url_for('items.image_file', filename=message.User.face_image_path) }}"
+          class="thumb"
+          alt="顔画像"
+        />
+        {% endif %}
+
+        <p>{{ message.User.username }}さん</p>
+      </div>
+      <div class="col-lg-10 messagewrap">
+        <!--投稿時間を日付/時/分/秒で表す-->
+        <p>
+          {{ message.TradingMessage.created_at.strftime('%Y/%m/%d %H:%M:%S') }}
+        </p>
+        <p>{{ message.TradingMessage.message|safe }}</p>
+      </div>
+    </div>
+    {% else %}
+    <div class="message-box border-bottom">
+      <div class="col-lg-10 messagewrap">
+        <!--投稿時間を日付/時/分/秒で表す-->
+        <p style="text-align: right">
+          {{ message.TradingMessage.created_at.strftime('%Y/%m/%d %H:%M:%S') }}
+        </p>
+        <p>
+          {{ message.TradingMessage.message|safe }}
+        </p>
+      </div>
+      <div class="col-lg-2 p-4 trading-message">
+        {% if message.User.face_image_path == None %}
+        <img
+          src="{{ url_for('static', filename='image/thumb.png') }}"
+          class="thumb"
+          alt="汎用顔画像"
+        />
+        {% else %}
+        <img
+          src="{{ url_for('items.image_file', filename=message.User.face_image_path) }}"
+          class="thumb"
+          alt="顔画像"
+        />
+        {% endif %}
+        <p>{{ message.User.username }}さん</p>
+      </div>
+    </div>
+    {% endif %} {% endfor %} {% else %}
+    <div class="message-box">
+      <div class="p-4 trading-message nomessage">
+        <p>メッセージはありません。</p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  sbumitarea = document.getElementById("submitarea");
+  shipping_contact = document.getElementById("shipping_contact");
+  // ページが読み込まれたとき
+  window.onload = function () {
+    submitarea.style.display = "none";
+  };
+  // チェックボックスがクリックされたとき
+  shipping_contact.addEventListener("click", function () {
+    if (shipping_contact.checked) {
+      submitarea.style.display = "block";
+    } else {
+      submitarea.style.display = "none";
+    }
+  });
+
+</script>
+
+{% endblock %}

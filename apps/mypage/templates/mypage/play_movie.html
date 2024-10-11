@@ -1,0 +1,23 @@
+{% extends 'item/base.html' %} {% block css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/style_item.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('mypage.static', filename='css/style_mypage.css') }}"
+/>
+{% endblock %} {% block js %} {% endblock %} {% block title %}
+購入動画再生ページ {% endblock %} {% block content %}
+<div class="movie">
+  <h1>{{ movie.Item.name }}</h1>
+  <video width="960" height="auto" controls>
+    <source
+      src="{{ url_for('items.movie_file',filename=movie.Item.movie_path) }}"
+      type="video/mp4"
+    />
+    Your browser does not support the video tag.
+  </video>
+</div>
+
+{% endblock %}

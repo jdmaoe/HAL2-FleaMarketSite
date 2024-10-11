@@ -1,0 +1,26 @@
+{% extends "item/base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" /> -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/miniboot.css') }}" />
+<link rel="stylesheet" href="{{ url_for('support.static', filename='css/contact.css') }}" />
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+
+{% block title %}
+お問い合わせ完了
+{% endblock %}
+
+{% block content %}
+<div class="support-container">
+  <h2>完了</h2>
+  <p>お問い合わせありがとうございました。</p>
+  <p>お問い合わせ内容を確認の上、担当者よりご連絡いたします。</p>
+</div>
+
+
+{% endblock %}

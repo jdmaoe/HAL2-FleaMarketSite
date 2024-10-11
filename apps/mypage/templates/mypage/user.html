@@ -1,0 +1,172 @@
+{% extends 'item/base.html' %} {% block css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/style_item.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/style.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('mypage.static', filename='css/style_mypage.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+{% endblock %} {% block js %} {% endblock %} {% block title %} マイページ {%
+endblock %} {% block content %}
+<div class="mypage-wrap">
+  <div class="profiles">
+    <div class="profiles-up">
+      <div class="profileimg-wrap">
+        {% if user.face_image_path == None %}
+        <img
+          src="{{ url_for('static',filename='image/thumb.png') }}"
+          alt="汎用顔画像"
+        />
+        {% else %}
+        <img
+          src="{{ url_for('items.image_file',
+          filename=user.face_image_path) }}"
+          alt="顔画像"
+        />
+        {% endif %}
+      </div>
+      <p class="editbtnwrap">
+        <a href="{{ url_for('mypage.edit_user', user_id=user.id) }}" class="btn"
+          ><img
+            src="{{ url_for('static',filename='image/edit.png') }}"
+            alt="編集"
+        /></a>
+      </p>
+    </div>
+    <div class="profiles-down">
+      <p>
+        <img
+          src="{{ url_for('static',filename='image/mypage1.png') }}"
+          alt="ユーザー"
+        />：{{ user.username }}
+      </p>
+      <p>
+        <img
+          src="{{ url_for('static',filename='image/mypage2.png') }}"
+          alt="メール"
+        />：{{ user.email }}
+      </p>
+      <p>
+        <img
+          src="{{ url_for('static',filename='image/mypage3.png') }}"
+          alt="電話"
+        />：{% if user.tel == None or user.tel == "None" %}未登録{% else %}{{
+        user.tel }}{% endif %}
+      </p>
+      <p>
+        <img
+          src="{{ url_for('static',filename='image/mypage5.png') }}"
+          alt="住所"
+        />：{% if user.address == None or user.address == "None" %}未登録{% else
+        %}{{ user.address }}{% endif %}
+      </p>
+      <p>
+        <img
+          src="{{ url_for('static',filename='image/mypage6.png') }}"
+          alt="建物"
+        />：{% if user.building_name_number == None or user.building_name_number
+        == "None" %}未登録{% else %}{{ user.building_name_number }}{% endif %}
+      </p>
+    </div>
+  </div>
+  <div class="mypage-link">
+    <div class="mypage-link-wrap">
+      <div class="mypage-link-up">
+        <div class="mypage-link-up-left">
+          <p>
+            <a
+              href="{{ url_for('mypage.blog', user_id=user.id) }}"
+              class="btn btn-tag green"
+              ><i class="fas fa-pencil-alt"></i>ブログ
+            </a>
+          </p>
+          <p>
+            <a
+              href="{{ url_for('mypage.follow_list', user_id=user.id) }}"
+              class="btn btn-tag green"
+              ><i class="fas fa-user"></i>フォロー</a
+            >
+          </p>
+          <p>
+            <a
+              href="{{ url_for('mypage.follower_list', user_id=user.id) }}"
+              class="btn btn-tag green"
+              ><i class="fas fa-user"></i>フォロワー</a
+            >
+          </p>
+        </div>
+        <div class="mypage-link-up-right">
+          <div class="box">
+            <img
+              src="{{ url_for('static',filename='image/basket.png') }}"
+              alt=""
+            />
+            <div class="ball"></div>
+            <div class="shadow-box"></div>
+          </div>
+        </div>
+      </div>
+      <div class="mypage-link-down">
+        <div class="mypage-link-down-left">
+          <p>
+            <a
+              href="{{ url_for('mypage.listing', user_id=user.id) }} "
+              class="btn btn-tag orange"
+              ><i class="fas fa-shopping-cart"></i>出品中商品</a
+            >
+          </p>
+          <p>
+            <a
+              href="{{ url_for('mypage.selltrading', user_id=user.id) }}"
+              class="btn btn-tag orange"
+              ><i class="fas fa-exchange-alt"></i>出品取引中商品</a
+            >
+          </p>
+          <p>
+            <a
+              href="{{ url_for('mypage.buytrading', user_id=user.id) }}"
+              class="btn btn-tag orange"
+              ><i class="fas fa-exchange-alt"></i>購入取引中商品</a
+            >
+          </p>
+        </div>
+        <div class="mypage-link-down-right">
+          <p>
+            <a
+              href="{{ url_for('mypage.sold', user_id=user.id) }}"
+              class="btn btn-tag orange"
+              ><i class="fas fa-yen-sign"></i>売却済み商品</a
+            >
+          </p>
+          <p>
+            <a
+              href="{{ url_for('mypage.bought', user_id=user.id) }}"
+              class="btn btn-tag orange"
+              ><i class="fas fa-shopping-bag"></i>購入済み商品</a
+            >
+          </p>
+          <p>
+            <a
+              href="{{ url_for('mypage.bought_movie', user_id=user.id) }}"
+              class="btn btn-tag orange"
+              ><i class="fab fa-youtube"></i>購入動画</a
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+</div>

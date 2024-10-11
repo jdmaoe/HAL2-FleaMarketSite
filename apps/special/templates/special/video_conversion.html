@@ -1,0 +1,33 @@
+{% extends "item/base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<link rel="stylesheet" href="{{ url_for('special.static',filename='css/movie.css') }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block title %}
+字幕作成
+{% endblock %}
+
+{% block content %}
+<h1>動画の字幕作成</h1>
+
+<p class="sub-title">mp4形式の動画に日本語字幕をつけます。</p>
+
+<form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="file" name="file" accept=".mp4" required>
+    <input type="submit" value="変換">
+</form>
+
+{% if message %}
+<p>{{ message }}</p>
+{% endif %}
+
+{% endblock %}

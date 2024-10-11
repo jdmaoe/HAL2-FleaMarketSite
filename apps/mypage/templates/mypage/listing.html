@@ -1,0 +1,77 @@
+{% extends 'item/base.html' %}
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<link rel="stylesheet" href="{{ url_for('mypage.static', filename='css/style_mypage.css') }}" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block title %}
+出品中商品一覧
+{% endblock %}
+
+{% block content %}
+
+<!--itemsが空でないとき-->
+{% if items %} 
+<div class="main-wrap listing">
+  <div class="h2 listing"><h2 class="midasi"><span>出品中商品一覧</span></h2></div>
+{% for item in items %}
+  <div class="listing-wrap">
+    <div class="list-img listing">
+    <div class="list-tape"></div>
+      <img
+        src="{{ url_for('items.image_file', filename=item.Image.image_path) }}"
+        class="card-img"
+        alt="..."
+      />
+    </div>
+    <div class="list-text">
+      <div class="list-user listing">
+        <!-- <h5 class="">商品名：{{ item.Item.name }}</h5> -->
+        <!-- 商品名が11文字を超える場合11文字と… -->
+        {% if item.Item.name|length > 11 %}
+        <h5 class="">商品名：{{ item.Item.name[:11] }}…</h5>
+        {% else %}
+        <h5 class="">商品名：{{ item.Item.name }}</h5>
+        {% endif %}
+        <!-- <p class="">価格：{{ item.Item.price }}円</p> -->
+        <!-- 価格を3桁区切り -->
+        <p class="">価格：{{ "{:,}".format(item.Item.price) }}円</p>
+        <!-- <p class="">商品説明：{{ item.Item.description }}</p> -->
+        <!-- 商品説明が15文字を超える場合15文字と… -->
+        {% if item.Item.description|length > 15 %}
+        <p class="">商品説明：{{ item.Item.description[:15] }}…</p>
+        {% else %}
+        <p class="">商品説明：{{ item.Item.description }}</p>
+        {% endif %}
+
+        <!--出品日時を日付/時/分/秒で表示-->
+        <p class="">
+          出品日時：{{ item.Item.created_at.strftime('%Y/%m/%d %H:%M:%S') }}
+        </p>
+      </div>
+
+      <form
+        action="{{ url_for('mypage.listing', user_id=current_user.id) }}"
+        method="post"
+        novalidate="novalidate"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="hidden" name="item_id" value="{{ item.Item.id }}" />
+        <button type="submit" class="button">出品取消</button>
+      </form>
+    </div>
+  </div>
+{% endfor %}
+</div>
+<!--itemsが空のとき-->
+{% else %}
+<div class="kokuban-s2">
+  <p>出品中の<br>商品はありません</p>
+</div>
+{% endif %} {% endblock %}

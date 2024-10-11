@@ -1,0 +1,313 @@
+{% extends "item/base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<link rel="stylesheet" href="{{ url_for('special.static',filename='css/style.css') }}">
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block title %}
+drop猫ゲーム
+{% endblock %}
+
+{% block content %}
+
+<canvas id="cvs" width="912" height="768"></canvas>
+
+<script>
+  const cvs = document.getElementById('cvs');
+  const ctx = cvs.getContext('2d');
+
+  const img_neko = [
+    null,
+    new Image(),
+    new Image(),
+    new Image(),
+    new Image(),
+    new Image(),
+    new Image(),
+    new Image()
+  ];
+
+  const cursor = new Image();
+  const bg = new Image();
+
+  // img_neko[1].srcには、staticフォルダの中にあるneko1.pngを指定してください。
+  img_neko[1].src = '{{ url_for("special.static", filename="/image/neko1.png") }}';
+  img_neko[2].src = '{{ url_for("special.static", filename="/image/neko2.png") }}';
+  img_neko[3].src = '{{ url_for("special.static", filename="/image/neko3.png") }}';
+  img_neko[4].src = '{{ url_for("special.static", filename="/image/neko4.png") }}';
+  img_neko[5].src = '{{ url_for("special.static", filename="/image/neko5.png") }}';
+  img_neko[6].src = '{{ url_for("special.static", filename="/image/neko6.png") }}';
+  img_neko[7].src = '{{ url_for("special.static", filename="/image/neko_niku.png") }}';
+
+  cursor.src = '{{ url_for("special.static", filename="/image/neko_cursor.png") }}';
+  bg.src = '{{ url_for("special.static", filename="/image/neko_bg.png") }}';
+
+  let index = 0;
+  let timer = 0;
+  let score = 0;
+  let hisc = 1000;
+  let difficulty = 0;
+  let tsugi = 0;
+
+  let cursor_x = 0;
+  let cursor_y = 0;
+  let mouse_x = 0;
+  let mouse_y = 0;
+  let mouse_c = 0;
+
+  const neko = [];
+  const check = [];
+
+  for (let i = 0; i < 10; i++) {
+    neko.push([0, 0, 0, 0, 0, 0, 0, 0]);
+    check.push([0, 0, 0, 0, 0, 0, 0, 0]);
+  }
+
+  function mouse_move(e) {
+    mouse_x = e.clientX - cvs.getBoundingClientRect().left;
+    mouse_y = e.clientY - cvs.getBoundingClientRect().top;
+  }
+
+  function mouse_press(e) {
+    mouse_c = 1;
+  }
+
+  function draw_neko() {
+    ctx.clearRect(0, 0, cvs.width, cvs.height);
+    for (let y = 0; y < 10; y++) {
+      for (let x = 0; x < 8; x++) {
+        if (neko[y][x] > 0) {
+          ctx.drawImage(img_neko[neko[y][x]], x * 72 + 24, y * 72 + 24);
+        }
+      }
+    }
+  }
+
+  function check_neko() {
+    for (let y = 0; y < 10; y++) {
+      for (let x = 0; x < 8; x++) {
+        check[y][x] = neko[y][x];
+      }
+    }
+
+    for (let y = 1; y < 9; y++) {
+      for (let x = 0; x < 8; x++) {
+        if (check[y][x] > 0) {
+          if (check[y - 1][x] === check[y][x] && check[y + 1][x] === check[y][x]) {
+            neko[y - 1][x] = 7;
+            neko[y][x] = 7;
+            neko[y + 1][x] = 7;
+          }
+        }
+      }
+    }
+
+    for (let y = 0; y < 10; y++) {
+      for (let x = 1; x < 7; x++) {
+        if (check[y][x] > 0) {
+          if (check[y][x - 1] === check[y][x] && check[y][x + 1] === check[y][x]) {
+            neko[y][x - 1] = 7;
+            neko[y][x] = 7;
+            neko[y][x + 1] = 7;
+          }
+        }
+      }
+    }
+
+    for (let y = 1; y < 9; y++) {
+      for (let x = 1; x < 7; x++) {
+        if (check[y][x] > 0) {
+          if (check[y - 1][x - 1] === check[y][x] && check[y + 1][x + 1] === check[y][x]) {
+            neko[y - 1][x - 1] = 7;
+            neko[y][x] = 7;
+            neko[y + 1][x + 1] = 7;
+          }
+          if (check[y + 1][x - 1] === check[y][x] && check[y - 1][x + 1] === check[y][x]) {
+            neko[y + 1][x - 1] = 7;
+            neko[y][x] = 7;
+            neko[y - 1][x + 1] = 7;
+          }
+        }
+      }
+    }
+  }
+
+  function sweep_neko() {
+    let num = 0;
+    for (let y = 0; y < 10; y++) {
+      for (let x = 0; x < 8; x++) {
+        if (neko[y][x] === 7) {
+          neko[y][x] = 0;
+          num += 1;
+        }
+      }
+    }
+    return num;
+  }
+
+  function drop_neko() {
+    let flg = false;
+    for (let y = 8; y >= 0; y--) {
+      for (let x = 0; x < 8; x++) {
+        if (neko[y][x] !== 0 && neko[y + 1][x] === 0) {
+          neko[y + 1][x] = neko[y][x];
+          neko[y][x] = 0;
+          flg = true;
+        }
+      }
+    }
+    return flg;
+  }
+
+  function over_neko() {
+    for (let x = 0; x < 8; x++) {
+      if (neko[0][x] > 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function set_neko() {
+    for (let x = 0; x < 8; x++) {
+      neko[0][x] = Math.floor(Math.random() * (difficulty + 1));
+    }
+  }
+  // カーソルを表示する関数
+  function drawCursor() {
+    ctx.drawImage(cursor, cursor_x * 72 + 24, cursor_y * 72 + 24);
+  }
+
+  // カーソルを消す関数
+  function deleteCursor() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+
+  function draw_txt(txt, x, y, siz, col, tg) {
+    ctx.font = `${siz}px "Times New Roman"`;
+    ctx.fillStyle = 'black';
+    ctx.fillText(txt, x + 2, y + 2);
+    ctx.fillStyle = col;
+    ctx.fillText(txt, x, y);
+  }
+
+  function game_main() {
+    if (index === 0) {
+      draw_txt("ねこねこ", 120, 240, 100, "violet", "TITLE");
+      ctx.fillStyle = 'skyblue';
+      ctx.fillRect(120, 350, 420, 480);
+      draw_txt("Easy", 280, 420, 40, "white", "TITLE");
+      ctx.fillStyle = 'lightgreen';
+      ctx.fillRect(120, 480, 420, 610);
+      draw_txt("Normal", 280, 564, 40, "white", "TITLE");
+      ctx.fillStyle = 'orange';
+      ctx.fillRect(120, 620, 420, 750);
+      draw_txt("Hard", 280, 708, 40, "white", "TITLE");
+      index = 1;
+      mouse_c = 0;
+    } else if (index === 1) {
+      difficulty = 0;
+      if (mouse_c === 1) {
+        if (120 < mouse_x && mouse_x < 420 && 350 < mouse_y && mouse_y < 480) {
+          difficulty = 4;
+        }
+        if (120 < mouse_x && mouse_x < 420 && 500 < mouse_y && mouse_y < 610) {
+          difficulty = 5;
+        }
+        if (120 < mouse_x && mouse_x < 420 && 650 < mouse_y && mouse_y < 750) {
+          difficulty = 6;
+        }
+      }
+      if (difficulty > 0) {
+        for (let y = 0; y < 10; y++) {
+          for (let x = 0; x < 8; x++) {
+            neko[y][x] = 0;
+          }
+        }
+        mouse_c = 0;
+        score = 0;
+        tsugi = 0;
+        cursor_x = 0;
+        cursor_y = 0;
+        set_neko();
+        draw_neko();
+        ctx.clearRect(0, 0, cvs.width, cvs.height);
+        index = 2;
+      }
+    } else if (index === 2) {
+      if (!drop_neko()) {
+        index = 3;
+      }
+      draw_neko();
+    } else if (index === 3) {
+      check_neko();
+      draw_neko();
+      index = 4;
+    } else if (index === 4) {
+      const sc = sweep_neko();
+      score += sc * difficulty * 2;
+      if (score > hisc) {
+        hisc = score;
+      }
+      if (sc > 0) {
+        index = 2;
+      } else {
+        if (!over_neko()) {
+          tsugi = Math.floor(Math.random() * (difficulty + 1));
+          index = 5;
+        } else {
+          index = 6;
+          timer = 0;
+        }
+      }
+      draw_neko();
+    } else if (index === 5) {
+      if (24 <= mouse_x && mouse_x < 24 + 72 * 8 && 24 <= mouse_y && mouse_y < 24 + 72 * 10) {
+        cursor_x = Math.floor((mouse_x - 24) / 72);
+        cursor_y = Math.floor((mouse_y - 24) / 72);
+        if (mouse_c === 1) {
+          mouse_c = 0;
+          set_neko();
+          neko[cursor_y][cursor_x] = tsugi;
+          tsugi = 0;
+          index = 2;
+        }
+        ctx.drawImage(cursor, cursor_x * 72 + 60, cursor_y * 72 + 60);
+        draw_neko();
+      }
+    } else if (index === 6) {
+      timer += 1;
+      if (timer === 1) {
+        draw_txt("GAME OVER", 312, 348, 60, "red", "OVER");
+      }
+      if (timer === 200) {
+        ctx.clearRect(0, 0, cvs.width, cvs.height);
+        index = 0;
+      }
+    }
+    draw_txt("SCORE" + score, 160, 60, 32, "blue", "INFO");
+    draw_txt("HISC" + hisc, 450, 60, 32, "yellow", "INFO");
+    if (tsugi > 0) {
+      ctx.drawImage(img_neko[tsugi], 716, 92);
+    }
+    // カーソルを表示する関数を呼び出す
+    drawCursor();  
+    requestAnimationFrame(game_main);
+  }
+
+  cvs.addEventListener('mousemove', mouse_move);
+  cvs.addEventListener('mousedown', mouse_press);
+  //
+  game_main();
+
+</script>
+
+
+
+{% endblock %}

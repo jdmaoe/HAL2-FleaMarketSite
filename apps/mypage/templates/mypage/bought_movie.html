@@ -1,0 +1,73 @@
+{% extends 'item/base.html' %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<link rel="stylesheet" href="{{ url_for('mypage.static', filename='css/style_mypage.css') }}" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block title %}
+購入完了動画一覧
+{% endblock %}
+
+{%block content %}
+
+<!--itemsが空でないとき-->
+{% if movies %}
+<div class="main-wrap movies">
+  <div class="h2 movies"><h2 class="midasi"><span>購入完了動画一覧</span></h2></div>
+{% for movie in movies %}
+  <div class="listing-wrap">
+    <div class="list-img movies">
+    <div class="list-tape"></div>
+      <img
+        src="{{ url_for('items.image_file', filename=movie.Image.image_path) }}"
+        class="card-img"
+        alt="..."
+      />
+    </div>
+    <div class="list-text">
+      <div class="list-user movies">
+        <!-- <h5 class="">商品名：{{ movie.Item.name }}</h5> -->
+        <!-- 商品名が11文字を超える場合11文字と… -->
+        {% if movie.Item.name|length > 11 %}
+        <h5 class="">商品名：{{ movie.Item.name[:11] }}…</h5>
+        {% else %}
+        <h5 class="">商品名：{{ movie.Item.name }}</h5>
+        {% endif %}
+        <!-- <p class="">商品概要：{{ movie.Item.description }}</p> -->
+        <!-- 商品概要が15文字を超える場合15文字と… -->
+        {% if movie.Item.description|length > 15 %}
+        <p class="">商品概要：{{ movie.Item.description[:15] }}…</p>
+        {% else %}
+        <p class="">商品概要：{{ movie.Item.description }}</p>
+        {% endif %}
+        <!-- <p class="">商品価格：{{ movie.Item.price }}円</p> -->
+        <!-- 価格を3桁区切り -->
+        <p class="">商品価格：{{ "{:,}".format(movie.Item.price) }}円</p>
+        <!--出品日時を日付/時/分/秒で表示-->
+        <p class="">
+          出品日時：{{ movie.Item.created_at.strftime('%Y/%m/%d %H:%M:%S') }}
+        </p>
+      </div>
+      <div class="button013 movies">
+        <a
+          href="{{ url_for('mypage.play_movie',user_id=user.id,item_id=movie.Item.id) }}"
+          class="moviewrap">再生する
+        </a>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+</div>
+<!--itemsが空のとき-->
+{% else %}
+<div class="kokuban-s2">
+  <p>購入した動画はありません</p>
+</div>
+{% endif %} {% endblock %}

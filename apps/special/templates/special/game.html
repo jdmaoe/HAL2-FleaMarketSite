@@ -1,0 +1,66 @@
+{% extends "item/base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_item.css') }}" />
+<link rel="stylesheet" href="{{ url_for('special.static',filename='css/style.css') }}">
+<style>
+  body {
+    background-image: url('/special/static/image/game_index.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block title %}
+ゲーム
+{% endblock %}
+
+{% block content %}
+
+<div class="game-container">
+  <a href="{{ url_for('special.drop') }}">
+    <div class="game-card">
+
+      <img src="./static/image/game_index_drop.png" alt="drop猫ゲーム">
+      <h1>
+        drop猫ゲーム
+      </h1>
+      <div class="text-left">
+        <p>
+          落ち物パズルゲームです。
+        </p>
+        <p>
+        盤面をクリックすると、その位置にブロックを１つ配置できます。ブロックが配置されると、画面上部から複数のブロックが落ちてきて、積みあがっていきます。同じ色のブロックをタテ・ヨコ・ナナメいずれか３つ以上揃えると消すことができます。最上段までブロックが積みあがってしまうとゲームオーバー。難易度はEasy・Nomal・Hardから選択できます。
+        </p>
+      </div>
+    </div>
+  </a>
+
+  <a href="{{ url_for('special.quiz') }}">
+    <div class="game-card">
+
+      <img src="./static/image/game_index_quiz.png" alt="クイズゲーム">
+      <h1>
+        クイズゲーム
+      </h1>
+      <div class="text-left">
+        <p>
+          4択のクイズゲームです。
+        </p>
+        <p>
+          回答の選択肢をクリックすると、正解・不正解が分かるとともに、次の問題へのボタンが出現します。選択肢の位置は出題の度にシャッフルされます。
+        </p>
+      </div>
+    </div>
+  </a>
+
+
+</div>
+
+{% endblock %}

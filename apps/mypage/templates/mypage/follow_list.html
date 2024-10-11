@@ -1,0 +1,56 @@
+{% extends 'item/base.html' %} {% block css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/style_item.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('mypage.static', filename='css/style_mypage.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('communication.static', filename='/css/thumb.css' ) }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/miniboot.css') }}"
+/>
+{% endblock %} {% block js %} {% endblock %} {% block title %} フォロー中一覧 {%
+endblock %} {%block content %}
+<div class="follow">
+  {% if follows %} {% for followee in follows %}
+  <div class="follow-list">
+    {% if followee.User.face_image_path == None %}
+    <img
+      src="{{ url_for('static',filename='image/thumb.png') }}"
+      class="thumb"
+      alt="汎用顔画像"
+    />
+    {% else %}
+    <img
+      src="{{ url_for('items.image_file',
+          filename=followee.User.face_image_path) }}"
+      class="thumb"
+      alt="顔画像"
+    />
+    {% endif %}
+    <p class="follow-name">{{ followee.User.username }}さん</p>
+
+    <form
+      action="{{ url_for('mypage.follow_list',user_id=user.id) }}"
+      method="post"
+      class="follow-form"
+    >
+      <!-- csrftoken -->
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <input type="hidden" name="user_id" value="{{ user.id }}" />
+      <input type="hidden" name="followee_id" value="{{ followee.User.id }}" />
+      <input type="submit" value="フォロー解除" class="btn btn-danger" />
+    </form>
+  </div>
+
+  {% endfor %} {% else %}
+  <p>フォロー中のユーザーはいません</p>
+  {% endif %}
+</div>
+{% endblock %}

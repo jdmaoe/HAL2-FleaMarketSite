@@ -1,0 +1,189 @@
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
+header {
+  display: flex;
+}
+
+.block90 {
+  height: 90px;
+}
+
+.block3 {
+  height: 3px;
+  background-color: #7ce6d7;
+}
+
+.trading-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  width: 100%;
+  padding: 0;
+}
+
+.trading-item {
+  width: 33.33%;
+  min-width: 300px;
+  height: 100%;
+  margin: 0;
+  padding: 50px;
+}
+
+.trading-item h4 {
+  font-size: 1.6rem;
+}
+
+.shippingtext {
+  font-weight: bold;
+  padding-bottom: 30px;
+  color: red;
+}
+
+/* チェックボックスのデザイン */
+input[type="checkbox"] {
+  display: none;
+} /* to hide the checkbox itself */
+input[type="checkbox"] + label:before {
+  font-family: FontAwesome;
+  display: inline-block;
+}
+
+input[type="checkbox"] + label:before {
+  content: "\f096";
+} /* unchecked icon */
+input[type="checkbox"] + label:before {
+  letter-spacing: 10px;
+} /* space between checkbox and label */
+
+input[type="checkbox"]:checked + label:before {
+  content: "\f046";
+} /* checked icon */
+input[type="checkbox"]:checked + label:before {
+  letter-spacing: 5px;
+} /* allow space for check mark */
+
+.checkboxlabel {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.trading-message {
+  width: 66.66%;
+  height: 100%;
+  margin: 0;
+  padding: 50px;
+}
+
+.productinfo h4 {
+  text-align: center;
+}
+
+.productinfo figure {
+  width: 45%;
+  height: 150px;
+  margin: 5px;
+}
+.productinfo figure img {
+  object-fit: cover;
+  height: 100%;
+}
+.imgwrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.detailwrap {
+  display: flex;
+}
+
+.detailwrap img {
+  width: 40%;
+  margin: 10px;
+}
+
+.detailwrap .detail {
+  width: 60%;
+  padding: 10px;
+}
+
+.detailwrap .detail h5 {
+  margin-bottom: 3px;
+}
+
+.detailwrap .detail p {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* 任意の行数を指定 */
+  margin-bottom: 7px;
+  font-size: 0.9rem;
+}
+
+.bt-line {
+  border-bottom: 5px solid #7ce6d7;
+}
+
+.bt-line2 {
+  border-bottom: 5px solid #e684c3;
+}
+
+.item-status-btn {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  width: 200px;
+  padding: 1rem 2rem;
+  margin: 20px auto 0 auto;
+  font-weight: bold;
+  border: 2px solid #7ce6d7;
+  background: #7ce6d7;
+  color: #fff;
+  border-radius: 100vh;
+  transition: 0.5s;
+}
+.item-status-btn:hover {
+  color: #7ce6d7;
+  background: #fff;
+}
+.item-message-btn {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  width: 200px;
+  padding: 1rem 2rem;
+  margin: 20px auto 0 auto;
+  font-weight: bold;
+  border: 2px solid #e684c3;
+  background: #e684c3;
+  color: #fff;
+  border-radius: 100vh;
+  transition: 0.5s;
+}
+.item-message-btn:hover {
+  color: #e684c3;
+  background: #fff;
+}
+
+.trading-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.message-box {
+  display: flex;
+}
+
+.messagewrap p {
+  font-size: 1.2rem;
+  margin: 10px;
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+.nomessage {
+  font-size: 1.6rem;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+}

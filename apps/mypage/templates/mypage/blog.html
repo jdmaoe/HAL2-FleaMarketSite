@@ -1,0 +1,96 @@
+{% extends 'item/base.html' %} {% block css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/style_item.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('mypage.static', filename='css/style_mypage.css') }}"
+/>
+
+{% endblock %} {% block js %} {% endblock %} {% block title %} ブログ作成 {%
+endblock %} {% block content %}
+
+<div class="blogwrap">
+  <form
+    action="{{ url_for('mypage.blog', user_id=user.id) }}"
+    method="post"
+    enctype="multipart/form-data"
+    novalidate="novalidate"
+    id="contact"
+  >
+    <div class="container">
+      {{ form.csrf_token }}
+      <div class="head">
+        <h2>ブログ作成</h2>
+      </div>
+      <label>
+        <span style="margin-bottom: 10px">
+          {{ form.title(class="form-control1",placeholder="タイトル") }}
+        </span>
+      </label>
+      {% for error in form.title.errors %}
+      <span style="color: red" class="errmsg">{{ error }}</span>
+      {% endfor %}
+      <div>
+        <label>
+          <span>
+            {{ form.body(class="form-control2",placeholder="内容") }}
+          </span>
+        </label>
+      </div>
+      {% for error in form.body.errors %}
+      <span style="color: red" class="errmsg">{{ error }}</span>
+      {% endfor %}
+      <div>
+        <label>
+          <span> {{ form.image(class="form-control3") }} </span>
+        </label>
+      </div>
+      {% for error in form.image.errors %}
+      <span style="color: red" class="errmsg">{{ error }}</span>
+      {% endfor %}
+      <div>
+        <label> {{ form.submit(class="button") }} </label>
+      </div>
+    </div>
+  </form>
+
+  <div class="blogright">
+    {% if blogs|length == 0 %}
+    <div class="kokuban-blog">
+      <p>ブログはありません。</p>
+    </div>
+    {% endif %} {% for blog in blogs %}
+    <section>
+      <img
+        src="{{ url_for('items.image_file',
+      filename=blog.image_path) }}"
+        alt="出品画像"
+      />
+    </section>
+    <h2 class="mypage-blog-title">{{ blog.title }}</h2>
+    <p>{{ blog.body }}</p>
+    <div class="text-right">
+      <!-- <p>{{ blog.created_at }}</p> -->
+      <!-- current_time - blog.created_atが60分未満なら -->
+      {% set time_difference = current_time - blog.created_at %} {% if
+      time_difference.days > 0 %} {{ time_difference.days }}日前 {% elif
+      time_difference.seconds < 3600 %} {{ time_difference.seconds // 60 }}分前
+      {% elif time_difference.seconds < 86400 %} {{ time_difference.seconds //
+      3600 }}時間前 {% else %} {{ sell_item.Item.created_at.strftime('%Y-%m-%d')
+      }} {% endif %}
+    </div>
+    <form
+      action="{{ url_for('mypage.delete_blog', user_id=user.id,blog_id=blog.id) }}"
+      method="post"
+      novalidate="novalidate"
+    >
+      {{ form_d.csrf_token }}
+      <span> {{ form_d.submit(class="btn btn-primary") }} </span>
+    </form>
+    <hr />
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

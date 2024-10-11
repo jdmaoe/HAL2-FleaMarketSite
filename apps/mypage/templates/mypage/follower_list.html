@@ -1,0 +1,40 @@
+{% extends 'item/base.html' %} {% block css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/style_item.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('mypage.static', filename='css/style_mypage.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('communication.static', filename='/css/thumb.css' ) }}"
+/>
+{% endblock %} {% block js %} {% endblock %} {% block title %} フォロワー一覧 {%
+endblock %} {%block content %}
+<div class="follow">
+  {% if followers %} {% for follower in followers %}
+  <div class="follower-list">
+    {% if follower.User.face_image_path == None %}
+    <img
+      src="{{ url_for('static',filename='image/thumb.png') }}"
+      class="thumb"
+      alt="汎用顔画像"
+    />
+    {% else %}
+    <img
+      src="{{ url_for('items.image_file',
+          filename=follower.User.face_image_path) }}"
+      class="thumb"
+      alt="顔画像"
+    />
+    {% endif %}
+    <p class="follower-name">{{ follower.User.username }}さん</p>
+  </div>
+  {% endfor %} {% else %}
+  <p>あなたをフォロー中のユーザーはいません</p>
+
+  {% endif %}
+</div>
+{% endblock %}
