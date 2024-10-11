@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('auth.static', filename='/css/style_auth.css') }}"/>
+  {% block css %}{% endblock %}
+  <script src="{{ url_for('auth.static', filename='/js/auth.js') }}"></script>
+</head>
+
+<body>
+  {% block content %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/starwarsintro.css') }}">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="star-wars-intro">
+
+    <!-- 最初に表示するタイトルテキスト -->
+    <p class="intro-text">
+      大変申し訳ございません。
+    </p>
+
+    <!-- 「ロゴ画像」か「テキストロゴ」を挿入 -->
+    <h2 class="main-logo">
+        Not Found
+    </h2>
+
+
+    <!-- メインコンテンツの挿入 -->
+    <div class="main-content">
+
+      <div class="title-content">
+
+        <p class="content-header">
+        </p>
+
+        <p class="content-body">
+        平素は格別のお引き立てを賜り厚く御礼申し上げます。このたびは、誠に申し訳ございません。ご提供いただきました画像データからは、顔が検出できませんでした。<br>
+        お手数ですが、カメラ内にご自身の顔が映っているか、顔の一部を隠されていないかなどご確認の上、再度ログインをお願いいたします。<br>  
+        </p>
+
+
+        <!-- ボタンやリンクを挿入 -->
+        <a href="{{ url_for('auth.signup') }}" class="space-button">ログインページへ戻る</a>
+
+      </div>
+
+    </div>
+
+
+  </div>
+</body>
+
+</html>

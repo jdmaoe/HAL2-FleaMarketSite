@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{{ url_for('auth.static',filename='css/face.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/miniboot.css') }}" />
+  <title>Recognition Result</title>
+</head>
+
+<body>
+  <div class="face">
+    <h1>認証結果</h1>
+    <p>{{ recognition_result }}</p>
+    <!-- もしログインしていたら、マイページへのリンクを表示 -->
+    {% if current_user.is_authenticated %}
+    <a class="navbar-brand" href="{{ url_for('auth.face_login') }}">マイページへ</a>
+    {% else %}
+    <a class="navbar-brand" href="{{ url_for('items.index') }}">topへ</a>
+    {% endif %}
+    <div class="face_space"></div>
+  </div>
+  
+</body>
+
+</html>

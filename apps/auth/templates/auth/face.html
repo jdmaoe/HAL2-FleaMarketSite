@@ -1,0 +1,22 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{{ url_for('auth.static',filename='css/face.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/miniboot.css') }}" />
+  <title>顔認証</title>
+</head>
+
+<body>
+  <div class="face">
+    <h1>顔認証</h1>
+    <img class="face_center" src="{{ url_for('auth.video_feed') }}" style="width: 50%; height: 50%" />
+    <br />
+    <a href="{{ url_for('auth.result') }}" class="btn btn-primary">Login</a>
+  </div>
+</body>
+
+</html>

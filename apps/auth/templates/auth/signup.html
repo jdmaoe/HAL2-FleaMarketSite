@@ -1,0 +1,118 @@
+{% extends "auth/base.html" %}
+
+{% block title %}ユーザー新規登録{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.4/css/all.css">
+{% endblock %}
+{% block content %}
+<div class="signup">
+  {% for message in get_flashed_messages() %}
+  <div class="flash-area">
+    <span class="form-flash">{{ message }}</span>
+  </div>
+  {% endfor %}
+  
+
+
+
+  <section>
+
+    <div class="login-wrap">
+      <div class="login-html">
+        <div id="page_top" class="page-top"><a href='/'></a></div>
+        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">サインイン</label>
+        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">新規登録</label>
+
+        <div class="login-form">
+
+          <div class="sign-in-htm">
+            <form method="post" action="{{ url_for('auth.signup') }}">
+
+              {{ form.csrf_token }}
+              <div class="group">
+                <label for="user" class="label">メールアドレス</label>
+                {{ form.email(class="form-control item-auth-input input", placeholder="メールアドレス") }}
+                <!-- <input id="user" type="text" class="input"> -->
+              </div>
+
+              <div class="group">
+                <label for="pass" class="label">パスワード</label>
+                {{ form.password(class="form-control item-auth-input input", placeholder="パスワード") }}
+                <!-- <input id="pass" type="password" class="input" data-type="password"> -->
+              </div>
+
+              <div class="group">
+                <input id="check" type="checkbox" class="check" checked>
+                <label for="check"><span class="icon"></span>サインインし続けますか？</label>
+              </div>
+
+              <div class="group">
+                {{ form.submit(class="btn btn-md btn-primary btn-block item-auth-btn button hover-pointer") }}
+              </div>
+
+              <div class="btn02">
+                <button class="btn btn-md btn-primary btn-block item-auth-btn button" id="submit_f" name="submit_f" type="button">
+                  <a href="{{ url_for('auth.face') }}" style="display: block; width: 100%; height: 100%;">顔認証</a>
+                </button>
+              </div>
+
+            </form>
+
+
+            <div class="hr"></div>
+
+            <div class="foot-lnk">
+              <a href="{{ url_for('auth.reset_password') }}">パスワードを忘れた場合</a>
+            </div>
+
+          </div>
+
+          <form class="form-signin" action="{{ url_for('auth.register') }}" method="POST">
+            {{ form_s.csrf_token }}
+
+
+            <div class="sign-up-htm">
+
+              <div class="group">
+                <label for="user" class="label">ユーザー名</label>
+                {{ form_s.username(size=30,class="form-control item-auth-input input", placeholder="ユーザー名") }}
+                <!-- <input id="user" type="text" class="input"> -->
+              </div>
+
+              <div class="group">
+                <label for="pass" class="label">パスワード</label>
+                {{ form_s.password(class="form-control item-auth-input input", placeholder="パスワード") }}
+                <!-- <input id="pass" type="password" class="input" data-type="password"> -->
+              </div>
+
+              <div class="group">
+                <label for="pass" class="label">再パスワード</label>
+                {{ form_s.re_password(class="form-control item-auth-input input", placeholder="パスワード") }}
+                <!-- <input id="pass" type="password" class="input" data-type="password"> -->
+              </div>
+
+              <div class="group">
+                <label for="pass" class="label">メールアドレス</label>
+                {{ form_s.email(class="form-control item-auth-input input", placeholder="メールアドレス") }}
+                <!-- <input id="pass" type="text" class="input"> -->
+              </div>
+
+              <div class="group">
+                {{ form_s.submit(class="btn btn-md btn-primary btn-block item-auth-btn button") }}
+              </div>
+
+              <div class="hr"></div>
+              <!--          <div class="foot-lnk">
+                <label for="tab-1">Already Member?</a>
+              </div> -->
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+{% endblock %}

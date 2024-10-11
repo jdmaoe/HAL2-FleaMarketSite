@@ -1,0 +1,18 @@
+.face{
+  background-image: url("../image/face_login.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+
+}
+
+.face_center{
+  margin: 20px auto;
+}
+
+.face_space{
+  height: 500px;
+}

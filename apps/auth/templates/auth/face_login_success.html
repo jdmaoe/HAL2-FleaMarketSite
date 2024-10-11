@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>顔認証に成功しました</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #f0f0f0;
+      background-image: url(../static/image/welcome.jpg);
+      background-size: cover;
+      animation: fadeImg 3s ease-in-out;
+    }
+
+    a {
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .welcomeText {
+      font-size: 3em;
+      text-align: center;
+      color: #333;
+      position: fixed;
+      display: none;
+      animation-duration: 2s;
+      animation-fill-mode: forwards;
+    }
+
+    .small {
+      font-size: 0.5em;
+    }
+
+    .large {
+      font-size: 2em;
+    }
+
+    .color1 {
+      color:#F7DC69;
+    }
+    .color2 {
+      color:#E684C3;
+    }
+    .color3 {
+      color:#7CE6D7;
+    }
+
+    .top {
+      position: fixed;
+      top: 40%;
+      left: 50%;
+      padding: 20px 30px;
+      font-size: 3rem;
+      background-color: #555;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 10px;
+      /* 灰色のシャドウ */
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+    }
+
+    @keyframes fadeImg {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-200px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(200px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-200px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeInBottom {
+      from {
+        opacity: 0;
+        transform: translateY(200px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="welcomeText" id="word1"><span class="color1">Hello!</span></div>
+  <div class="welcomeText" id="word2">Facial recognition succeeded</div>
+  <div class="welcomeText" id="word3"><span class="large color1">Welcome to SCOLA</span></div>
+  <div class="welcomeText" id="word4"><span class="small color2">Link Start!</span></div>
+  <div class="welcomeText" id="word5">you are logged in</div>
+  <div class="welcomeText" id="word6"><span class="large">Verified user login</span></div>
+  <div class="welcomeText" id="word7"><span class="small color3">System all Green</span></div>
+  <div class="welcomeText" id="word8"><span class="color3">Hello World!</span></div>
+  <div class="welcomeText" id="word9"><span class="color2">Glad to see you!</span></div>
+  <div class="welcomeText" id="word10"><span class="small">Facial recognition successful!</span></div>
+  <div class="welcomeText" id="word11"><span class="color1">Verified via facial recognition</span></div>
+  <div class="welcomeText" id="word12"><span class="small">You've been authenticated via facial recognition.</span>
+  </div>
+  <div class="welcomeText" id="word13">neural linkage</div>
+  <div class="welcomeText" id="word14"><span class="small">CPC settings completed</span></div>
+  <a href="{{ url_for('items.index') }}">
+    <button class="top">トップページへ</a></button>
+  </a>
+  
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var welcomeTexts = document.querySelectorAll('.welcomeText');
+
+      // テキストをランダムな位置に表示する
+      welcomeTexts.forEach(function (text) {
+        // ランダムな位置と方向を設定
+        var randomTop = Math.random() * 100; // 画面上部からの位置
+        var randomLeft = Math.random() * 100; // 画面左部からの位置
+        var randomDirection = Math.floor(Math.random() * 4); // ランダムな方向（0: 上, 1: 右, 2: 下, 3: 左）
+
+        // ランダムな位置と方向にアニメーションを適用
+        text.style.top = randomTop + '%';
+        text.style.left = randomLeft + '%';
+        switch (randomDirection) {
+          case 0:
+            text.style.animationName = 'fadeIn';
+            break;
+          case 1:
+            text.style.animationName = 'fadeInRight';
+            break;
+          case 2:
+            text.style.animationName = 'fadeInBottom';
+            break;
+          case 3:
+            text.style.animationName = 'fadeInLeft';
+            break;
+        }
+        text.style.display = 'block';
+      });
+    });
+  </script>
+
+</body>
+
+</html>
