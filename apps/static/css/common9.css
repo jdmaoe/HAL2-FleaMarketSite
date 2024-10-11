@@ -1,0 +1,323 @@
+canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  z-index: -99;
+  padding: 0;
+  margin: 0;
+}
+
+#canvasContainer {
+  position: relative;
+}
+
+#c {
+  display: block; /* Canvasがインライン要素として表示されないようにする */
+}
+
+#pageTitle {
+  position: absolute;
+  top: 100px; /* 適切な位置に調整 */
+  left: 20px; /* 適切な位置に調整 */
+  color: #ffffff; /* タイトルの文字色 */
+  font-size: 100px; /* タイトルのフォントサイズ */
+  font-family: Arial, sans-serif; /* タイトルのフォントファミリー */
+}
+
+body {
+  background: #801638;
+  width: 100%;
+  overflow-x: hidden;
+}
+body,
+body > * {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+}
+* {
+  transition: all 0.3s ease 0s;
+}
+::selection {
+  background: #000 !important;
+  color: #fff !important;
+}
+::-moz-selection {
+  background: #000 !important;
+  color: #fff !important;
+}
+body > div + div {
+  background: #801638;
+}
+body > div + div article:nth-child(1) {
+  background: #c22326;
+}
+body > div + div article:nth-child(2) {
+  background: #f37338;
+}
+body > div + div article:nth-child(3) {
+  background: #fdb632;
+}
+body > div + div article:nth-child(4) {
+  background: #027878;
+}
+body > div + div article:nth-child(5) {
+  background: #801638;
+}
+html,
+body,
+body > div + div {
+  width: 100vw;
+  height: 100vh;
+}
+body > div + div {
+  list-style: none;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  overflow: hidden;
+}
+body > div + div article {
+  flex: initial;
+  width: 20%;
+  height: 100%;
+  text-align: center;
+  color: #fff;
+  text-decoration: none;
+  vertical-align: bottom;
+  box-sizing: border-box;
+  padding: 2vh 1vw;
+  position: relative;
+  z-index: 999;
+}
+body > div:first-child {
+  position: fixed;
+  /* bottom: 8vh; */
+  background: #fff;
+  width: 100%;
+  text-align: center;
+  /* padding: 0.5rem; */
+  z-index: 2;
+}
+body > div:first-child h1,
+body > div:first-child h2 {
+  margin: 0;
+  padding: 0;
+}
+body > div + div:hover article {
+  flex: initial;
+  width: 10%;
+}
+body > div + div article:hover {
+  width: 70%;
+}
+article > div {
+  opacity: 0;
+  transition: opacity 0.2s ease 0;
+}
+article:hover > div {
+  opacity: 1;
+  transition: opacity 0.3s ease 0.3s;
+}
+body > div + div article > h2 {
+  bottom: 2.2vh;
+  left: 0;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  margin: 0;
+  font-size: 3vh;
+}
+body > div + div:hover article > h2 {
+  bottom: 2.8vh;
+  font-size: 2vh;
+}
+body > div + div article:hover > h2 {
+  bottom: 2.2vh;
+  font-size: 3vh;
+}
+article > div {
+  text-align: left;
+  width: 58vw;
+}
+article > div p,
+article > div h2,
+article > div h3 {
+  /* margin: 0 0 1em 0; */
+  width: 30vw;
+  font-size: 1.4rem;
+}
+
+article > div h3 {
+  font-size: 8vh;
+  margin-left: 30px;
+  margin-top: 30px;
+  margin-bottom: 1%;
+}
+article > div p {
+  width: 90%;
+  margin: 0 auto 6% auto;
+  font-weight: bold;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-transform: uppercase;
+}
+a {
+  color: #fff;
+  text-decoration: none;
+}
+a:after {
+  /* content: " >"; */
+}
+a:hover {
+  text-decoration: underline;
+}
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.col-6 {
+  width: 50%;
+  float: left;
+}
+
+@media (max-width: 900px) {
+  body > div + div article {
+    padding: 2vh 3vw;
+  }
+  body > div + div article > h2 {
+    transform: rotate(90deg);
+    bottom: 23vh;
+    min-width: 12em;
+    text-align: left;
+    transform: rotate(-90deg);
+    transform-origin: 0 0 0;
+    opacity: 1;
+  }
+  body > div + div article:hover > h2 {
+    opacity: 0;
+  }
+  article div {
+    max-height: calc(72%);
+    overflow-y: auto;
+  }
+  article div article div p {
+    width: 50vw;
+  }
+}
+.gallery {
+  width: 100%;
+  height: 0;
+  /* padding-top: 40%; */
+  box-sizing: border-box;
+  position: relative;
+  /* display: flex; */
+}
+
+.gallery img {
+  width: 28%;
+  height: 16vw;
+  object-fit: cover;
+  border-radius: 300px;
+  margin: 0px 2% 2% 2%;
+  transition: all 1s linear 0s;
+}
+.gallery img:hover {
+  transform: rotateY(360deg);
+}
+.gallery img:nth-child(2) {
+  margin-bottom: -90px;
+}
+
+/*  */
+
+.emblem {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 20vh;
+  margin: 0 auto;
+  width: 60vh;
+  height: 60vh;
+  border-radius: 50%;
+  font-weight: bold;
+  color: #fff;
+  animation: spinZ 20s linear infinite;
+  text-align: center;
+}
+.emblem span {
+  position: absolute;
+  display: inline-block;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  text-transform: uppercase;
+  font-size: 7vh;
+  transition: all 0.5s cubic-bezier(0, 0, 0, 1);
+}
+@keyframes spinZ {
+  0% {
+    transform: rotateZ(360deg);
+  }
+  100% {
+    transform: rotateZ(0deg);
+  }
+}
+
+@keyframes rotation1 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+#canvasContainer img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: 10s linear infinite rotation1;
+}
+
+#page-top {
+  position: fixed;
+  left: 0px;
+  top: 20px;
+  height: 50px;
+  text-decoration: none;
+  font-weight: 100;
+  transform: rotate(90deg);
+  font-size: 90%;
+  line-height: 1.5rem;
+  color: #fff;
+  padding: 0 0 0 35px;
+  border-top: solid 2px;
+  font-family: sans-serif;
+}
+#page-top::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -1px;
+  left: 0px;
+  width: 15px;
+  border-top: solid 2px;
+  transform: rotate(35deg);
+  transform-origin: left top;
+}
+
+#page-top:hover {
+  color: #000;
+}
