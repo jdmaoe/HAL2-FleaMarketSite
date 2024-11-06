@@ -3,5 +3,3 @@
 主にコミュニケーションまわりのフロントエンド、バックエンドを担当。
 
 紹介動画：https://github.com/user-attachments/assets/5184b9ad-3490-4326-a1fa-8ec57ca1849b
-
-flaskの環境下で実行してください。
